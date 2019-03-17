@@ -161,8 +161,10 @@ igrefrom=[]
 while True:
 	cmd=input(">>>")
 	if cmd=="h":
-		print("可用命令：addig addtr ld auto show ato score manu pass")
+		print("可用命令：addig addtr ld auto show ato score manu pass save")
 		print("输入命令以查看具体用法")
+
+
 	elif cmd[:5]=="addig":
 		try:
 			cmdli=cmd[6:].split(" ")
@@ -183,6 +185,8 @@ while True:
 			print("\t其中类型支持re（正则表达式）和n（普通字串）")
 			print("样例：\taddig re \\[s:.*?\\].*?")
 			print("\taddig n [del]")
+
+
 	elif cmd[:5]=="addtr":
 		try:
 			cmdli=cmd[6:].split(" ")
@@ -203,6 +207,8 @@ while True:
 			print("\t其中类型支持re（正则表达式）和n（普通字串）")
 			print("样例：\taddtr re 火.*?鲁.*? 火奴鲁鲁")
 			print("\taddtr n 撸撸 火奴鲁鲁")
+
+
 	elif cmd[:2]=="ld":
 		cmdchr=input("此操作是重载字典，输入q可返回，否则按回车继续：")
 		if cmdchr=="q":
@@ -239,6 +245,8 @@ while True:
 			print(trto)
 			print(igrefrom)
 			print(igfrom)
+
+
 	elif cmd[:4]=="pass":
 		i=comment_process[0]
 		tpi=i
@@ -249,25 +257,37 @@ while True:
 			i=re.sub(trrefrom[ii],trreto[ii],i)
 		for ii in range(len(igfrom)):
 			i=i.replace(igfrom[ii],'')
-		#print(igrefrom)
+
 		for ii in range(len(igrefrom)):
 			i=re.sub(igrefrom[ii],'',i)
-			print(i)
+
 		for ii in range(len(kansens)):
 			if i.find(kansens[ii])!=-1:
 				i=i.replace(kansens[ii],'')
 				cur_vote[ii]=1
-		print(i,"的处理结果：")
-		for jj in range(len(kansens)):
-			print(kansens[jj],cur_vote[jj])
-		askconf=input("输入n以离开，否则回车将此票计入:")
-		if askconf=="n":
-			continue
-		else:
-			votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
-			comment_process.pop(0)
+		while True:		
+			print(tpi,"的处理结果：")
+			for jj in range(len(kansens)):
+				print(jj,kansens[jj],cur_vote[jj])
+		
+			askconf=input("输入n以离开,或输入舰娘名或对应下标以修改此票，否则回车将此票计入:")
+			if askconf=="n":
+				break
+			elif kansens.find(askconf)!=-1:
+				tag=kansens.find(askconf)
+				cur_vote[tag]=cur_vote[tag]^1
+			elif askconf.isdigit():
+				cur_vote[askconf]=cur_vote[askconf]^1
+			elif askconf=='':
+				votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
+				comment_process.pop(0)
+				break
+			else:
+				print("无法理解的指令")
+
+
 	elif cmd[:4]=="manu":
-		print("此操作是输出处理第一个记录结果，需先运行loaddic和show")
+		print("此操作是输出处理第一个记录结果，需先运行ld和show")
 		cmdchr=input("输入q可返回，否则按回车继续：")
 		if cmdchr=="q":
 			continue
@@ -281,18 +301,17 @@ while True:
 				i=re.sub(trrefrom[ii],trreto[ii],i)
 			for ii in range(len(igfrom)):
 				i=i.replace(igfrom[ii],'')
-			#print(igrefrom)
 			for ii in range(len(igrefrom)):
 				i=re.sub(igrefrom[ii],'',i)
-				print(i)
 			for ii in range(len(kansens)):
 				if i.find(kansens[ii])!=-1:
 					i=i.replace(kansens[ii],'')
 					cur_vote[ii]=1
 			print(i)
 			
+
 	elif cmd[:4]=="auto":
-		print("此操作是自动处理投票记录，需先运行loaddic")
+		print("此操作是自动处理投票记录，需先运行ld")
 		cmdchr=input("输入q可返回，否则按回车继续：")
 		if cmdchr=="q":
 			continue

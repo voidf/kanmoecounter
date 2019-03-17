@@ -114,29 +114,32 @@ comment_ind=[int(i) for i in range(len(comment_raw))]
 
 voted_uid=[]
 print("投票有效性验证中……")
-p=1
-# for i in users_id:#根据规则进行一些处理
-# 	check_reg=ses.get("https://bbs.nga.cn/nuke.php?__lib=ucp&__act=get&lite=js&uid=%s"%i,headers=hds).content.decode("gbk")
-# 	regdate=int(re.findall(re.compile('''"regdate":(.*?),.*?'''),check_reg)[0])
-# 	print(p/len(users_id)*100,"%",sep='')
-# 	p+=1
-# 	if regdate>1551369600:
-# 		print("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%i)
-# 		while i in users_id:
-# 			pos=users_id.index(i)
-# 			del users_id[pos]
-# 			del comment_raw[pos]
-# 			del comment_ind[pos]
-# 		continue
-# 	elif i not in voted_uid:
-# 		voted_uid.append(i)
-# 	else:
-# 		print("发现用户%s发表了多个回复，只保留第一个"%i)
-# 		while users_id.count(i)>1:
-# 			pos=users_id.index(i,users_id.index(i)+1)
-# 			del users_id[pos]
-# 			del comment_raw[pos]
-# 			del comment_ind[pos]
+
+ifchk=input("是否检测投票用户注册时间？是请输入y：")
+if ifchk=="y":
+	p=1
+	for i in users_id:#根据规则进行一些处理
+		check_reg=ses.get("https://bbs.nga.cn/nuke.php?__lib=ucp&__act=get&lite=js&uid=%s"%i,headers=hds).content.decode("gbk")
+		regdate=int(re.findall(re.compile('''"regdate":(.*?),.*?'''),check_reg)[0])
+		print(p/len(users_id)*100,"%",sep='')
+		p+=1
+		if regdate>1551369600:
+			print("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%i)
+			while i in users_id:
+				pos=users_id.index(i)
+				del users_id[pos]
+				del comment_raw[pos]
+				del comment_ind[pos]
+			continue
+		elif i not in voted_uid:
+			voted_uid.append(i)
+		else:
+			print("发现用户%s发表了多个回复，只保留第一个"%i)
+			while users_id.count(i)>1:
+				pos=users_id.index(i,users_id.index(i)+1)
+				del users_id[pos]
+				del comment_raw[pos]
+				del comment_ind[pos]
 
 #try:
 with open("ngaResult.json","w") as fr:#保存用户投票记录到文件
@@ -158,7 +161,7 @@ igrefrom=[]
 while True:
 	cmd=input(">>>")
 	if cmd=="h":
-		print("可用命令：addig addtr loaddic auto show ato score manu pass")
+		print("可用命令：addig addtr ld auto show ato score manu pass")
 		print("输入命令以查看具体用法")
 	elif cmd[:5]=="addig":
 		try:
@@ -200,7 +203,7 @@ while True:
 			print("\t其中类型支持re（正则表达式）和n（普通字串）")
 			print("样例：\taddtr re 火.*?鲁.*? 火奴鲁鲁")
 			print("\taddtr n 撸撸 火奴鲁鲁")
-	elif cmd[:7]=="loaddic":
+	elif cmd[:2]=="ld":
 		cmdchr=input("此操作是重载字典，输入q可返回，否则按回车继续：")
 		if cmdchr=="q":
 			continue
@@ -257,7 +260,7 @@ while True:
 		print(i,"的处理结果：")
 		for jj in range(len(kansens)):
 			print(kansens[jj],cur_vote[jj])
-		askconf=input("输入n以离开，否则回车将此票计入")
+		askconf=input("输入n以离开，否则回车将此票计入:")
 		if askconf=="n":
 			continue
 		else:

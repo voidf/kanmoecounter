@@ -56,7 +56,7 @@ except:
 		"Upgrade-Insecure-Requests":"1",
 		"User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
 	}
-	hds["Cookie"]=input("(调试时可选)Cookie:")
+	hds["Cookie"]=input("(不懂就先敲回车)Cookie:")
 	if hds["Cookie"]=='':
 		try:
 			with open("ngack.txt","r") as fr:
@@ -394,7 +394,19 @@ while True:
 	elif cmd[:3]=="ato":
 		print("剩余%d条记录因无法完美匹配无法自动处理"%len(comment_process))
 	elif cmd[:4]=="show":
-		print("正在打印最近5条无法自动处理的记录：")
+        try:
+            showargv=int(cmd[5:])
+            if showargv>len(comment_process):
+                print("剩余记录数：%d；参数过大"%len(comment_process))
+                continue
+            for i in range(showargv):
+                print(comment_process[i])
+            continue
+        except:
+            pass
+        print("show 欲显示的记录数；示例：")
+        print("show 23")
+		print("默认打印最近5条无法自动处理的记录：")
 		for i in range(5):
 			print(comment_process[i])
 	elif cmd[:5]=="score":

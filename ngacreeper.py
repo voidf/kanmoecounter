@@ -181,7 +181,7 @@ while True:
 		print("输入命令以查看具体用法")
 	elif cmd[:4]=="save":
 		print("此操作将会把剩余未处理的记录保存为文件，输入q以离开")
-		askconf=input("按下空格以继续：")
+		askconf=input("按下回车以继续：")
 		if askconf=="q":
 			continue
 		else:

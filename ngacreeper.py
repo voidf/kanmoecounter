@@ -77,7 +77,7 @@ def catch_page(req,if_first):
 	#retrytime=20
 	for i in reply_list:
 		#print(str(i))
-		flr=int(re.findall(re.compile('''postcontainer(.*?)["'].*?'''),str(i))[0])
+		flr=int(re.findall(re.compile('''postcontainer(.*?)["'].*?'''),str(i))[0])#'
 		
 		if flr<=floor:
 			# if retrytime>0:
@@ -88,7 +88,7 @@ def catch_page(req,if_first):
 		#retrytime=20
 		floor=flr
 		uid=re.findall(re.compile('''uid=(.*?)['"] id=.*?'''),str(i))
-		com=re.findall(re.compile('''<span class=['"]postcontent ubbcode['"] id=['"]postcontent.+['"]>(.*?)</span>.*?'''),str(i))
+		com=re.findall(re.compile('''<span class=['"]postcontent ubbcode['"] id=['"]postcontent.+['"]>(.*?)</span>.*?'''),str(i))#'
 		users_id.append(uid[0])
 		comment_raw.append(com[0])
 	print(len(users_id))

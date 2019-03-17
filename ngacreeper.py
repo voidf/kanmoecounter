@@ -158,7 +158,7 @@ igrefrom=[]
 while True:
 	cmd=input(">>>")
 	if cmd=="h":
-		print("可用命令：addig addtr loaddic auto show ato score manu")
+		print("可用命令：addig addtr loaddic auto show ato score manu pass")
 		print("输入命令以查看具体用法")
 	elif cmd[:5]=="addig":
 		try:
@@ -236,6 +236,33 @@ while True:
 			print(trto)
 			print(igrefrom)
 			print(igfrom)
+	elif cmd[:4]=="pass":
+		i=comment_process[0]
+		tpi=i
+		cur_vote=[0 for ii in range(len(kansens))]
+		for ii in range(len(trfrom)):
+			i=i.replace(trfrom[ii],trto[ii])
+		for ii in range(len(trrefrom)):
+			i=re.sub(trrefrom[ii],trreto[ii],i)
+		for ii in range(len(igfrom)):
+			i=i.replace(igfrom[ii],'')
+		#print(igrefrom)
+		for ii in range(len(igrefrom)):
+			i=re.sub(igrefrom[ii],'',i)
+			print(i)
+		for ii in range(len(kansens)):
+			if i.find(kansens[ii])!=-1:
+				i=i.replace(kansens[ii],'')
+				cur_vote[ii]=1
+		print(i,"的处理结果：")
+		for jj in range(len(kansens)):
+			print(kansens[jj],cur_vote[jj])
+		askconf=input("输入n以离开，否则回车将此票计入")
+		if askconf=="n":
+			continue
+		else:
+			votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
+			comment_process.pop(0)
 	elif cmd[:4]=="manu":
 		print("此操作是输出处理第一个记录结果，需先运行loaddic和show")
 		cmdchr=input("输入q可返回，否则按回车继续：")

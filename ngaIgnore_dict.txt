@@ -2,10 +2,11 @@
 {"type": "n", "from": " "}
 {"type": "n", "from": "."}
 {"type": "n", "from": "?"}
-{"type": "n", "from": "/"}
 {"type": "n", "from": "*"}
 {"type": "n", "from": "^"}
 {"type": "n", "from": "&"}
 {"type": "re", "from": "\\[s:.*?\\].*?"}
 {"type": "n", "from": "\uff0c"}
 {"type": "n", "from": "\uff0c"}
+{"type": "n", "from": "<br/>"}
+{"type": "n", "from": "\u3001"}

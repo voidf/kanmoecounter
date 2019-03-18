@@ -9,3 +9,5 @@
 {"type": "n", "from": "\u5973\u738b", "to": "\u4f0a\u4e3d\u838e\u767d\u5973\u738b"}
 {"type": "n", "from": "\u706b\u5974\u4e73\u4e73", "to": "\u706b\u5974\u9c81\u9c81"}
 {"type": "n", "from": "\u59b9\u59b9", "to": "\u72ec\u89d2\u517d"}
+{"type": "n", "from": "\u5357\u79d1\u8fbe\u4ed6", "to": "\u5357\u8fbe\u79d1\u4ed6"}
+{"type": "n", "from": "\u4e00\u62b9\u591a", "to": "\u72ec\u89d2\u517d"}

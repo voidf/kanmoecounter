@@ -193,9 +193,9 @@ def chkdic(i):
     
     
     for ii in range(len(igrefrom)):
-    i=re.sub(igrefrom[ii],'',i)
+        i=re.sub(igrefrom[ii],'',i)
     for ii in range(len(igfrom)):
-    i=i.replace(igfrom[ii],'')
+        i=i.replace(igfrom[ii],'')
     
     
     for ii in range(len(trfrom)):
@@ -300,7 +300,7 @@ while True:
 
             igfrom=[]
             igrefrom=[]
-
+            
             with open("ngaTranslate_dict.txt","r") as fa:
                 for i in fa:
                     cur_dict=json.loads(i)
@@ -318,6 +318,8 @@ while True:
                         igrefrom.append(cur_dict["from"])
                     elif cur_dict["type"]=="n":
                         igfrom.append(cur_dict["from"])
+            a1=1
+            a2=0 #对列表进行子字符串处理，利用冒泡排序
             print(trrefrom)
             print(trreto)
             print(trfrom)

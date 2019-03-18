@@ -40,7 +40,7 @@ Windows用户通过python官网安装的请使用pip install requests bs4来安�
 
 例子：addig n awsl
 
-例子：addig re \\(.*?\\).*?
+例子：addig re \\(.\*?\\).\*?
 
 **addtr:** 添加一条转义规则，可以是正则表达式或者是普通的字符串。使用格式为 *addig 类型 需要替换的字符或表达式 替换后的字符串*
 

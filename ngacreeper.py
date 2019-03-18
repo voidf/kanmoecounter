@@ -329,21 +329,7 @@ while True:
     elif cmd[:4]=="pass":
         i=comment_process[0]
         tpi=i
-        cur_vote=[0 for ii in range(len(kansens))]
-        for ii in range(len(trfrom)):
-            i=i.replace(trfrom[ii],trto[ii])
-        for ii in range(len(trrefrom)):
-            i=re.sub(trrefrom[ii],trreto[ii],i)
-        for ii in range(len(igfrom)):
-            i=i.replace(igfrom[ii],'')
-
-        for ii in range(len(igrefrom)):
-            i=re.sub(igrefrom[ii],'',i)
-
-        for ii in range(len(kansens)):
-            if i.find(kansens[ii])!=-1:
-                i=i.replace(kansens[ii],'')
-                cur_vote[ii]=1
+        i=chkdic(i)
         while True:		
             print(tpi,"的处理结果：")
             for jj in range(len(kansens)):
@@ -377,19 +363,7 @@ while True:
         else:
             i=comment_process[0]
             tpi=i
-            cur_vote=[0 for ii in range(len(kansens))]
-            for ii in range(len(trfrom)):
-                i=i.replace(trfrom[ii],trto[ii])
-            for ii in range(len(trrefrom)):
-                i=re.sub(trrefrom[ii],trreto[ii],i)
-            for ii in range(len(igfrom)):
-                i=i.replace(igfrom[ii],'')
-            for ii in range(len(igrefrom)):
-                i=re.sub(igrefrom[ii],'',i)
-            for ii in range(len(kansens)):
-                if i.find(kansens[ii])!=-1:
-                    i=i.replace(kansens[ii],'')
-                    cur_vote[ii]=1
+            i=chkdic(i)
             print(i)
             
 ##############################################auto
@@ -401,23 +375,8 @@ while True:
         else:
             inte=0
             while inte < len(comment_process):
-                i=comment_process[inte]
-                tpi=i
-                cur_vote=[0 for ii in range(len(kansens))]
-                for ii in range(len(trfrom)):
-                    i=i.replace(trfrom[ii],trto[ii])
-                for ii in range(len(trrefrom)):
-                    i=re.sub(trrefrom[ii],trreto[ii],i)
-                for ii in range(len(igfrom)):
-                    i=i.replace(igfrom[ii],'')
-                for ii in range(len(igrefrom)):
-                    i=re.sub(igrefrom[ii],'',i)
-                    #print(i)
-                for ii in range(len(kansens)):
-                    if i.find(kansens[ii])!=-1:
-                        i=i.replace(kansens[ii],'')
-                        cur_vote[ii]=1
-                        #print(cur_vote)
+                tpi=comment_process[inte]
+                i=chkdic(comment_process[inte])
                 if cur_vote.count(1)>3:
                     print("投票对象大于3个，%s作废"%tpi)
                     comment_process.pop(inte)

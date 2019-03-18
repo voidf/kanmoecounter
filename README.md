@@ -62,3 +62,4 @@ Windows用户通过python官网安装的请使用pip install requests bs4来安�
 
 **score:** 输出目前参赛舰娘的得票数。
 
+## 退出请直接CTRL+C或者红叉叉。

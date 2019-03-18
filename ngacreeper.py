@@ -179,11 +179,48 @@ trreto=[]
 igfrom=[]
 igrefrom=[]
 
+def chkdic(i):
+    global trfrom
+    global trrefrom
+    global trto
+    global trreto
+    global igfrom
+    global igrefrom
+    global kansens
+    global votes
+    global cur_vote
+    cur_vote=[0 for ii in range(len(kansens))]
+    
+    
+    for ii in range(len(igrefrom)):
+    i=re.sub(igrefrom[ii],'',i)
+    for ii in range(len(igfrom)):
+    i=i.replace(igfrom[ii],'')
+    
+    
+    for ii in range(len(trfrom)):
+        i=i.replace(trfrom[ii],trto[ii])
+        for ii in range(len(kansens)):
+            if i.find(kansens[ii])!=-1:
+                i=i.replace(kansens[ii],'')
+                cur_vote[ii]=1
+        
+    for ii in range(len(trrefrom)):
+        i=re.sub(trrefrom[ii],trreto[ii],i)
+        for ii in range(len(kansens)):
+            if i.find(kansens[ii])!=-1:
+                i=i.replace(kansens[ii],'')
+                cur_vote[ii]=1
+
+    return i
+
 while True:
     cmd=input(">>>")
     if cmd=="h":
         print("可用命令：addig addtr ld auto show ato score manu pass save")
         print("输入命令以查看具体用法")
+        
+#############################################save
     elif cmd[:4]=="save":
         print("此操作将会把剩余未处理的记录保存为文件，输入q以离开")
         askconf=input("按下回车以继续：")
@@ -205,6 +242,8 @@ while True:
             print("Result.json可用于重载进度")
             print("重载方法为重新启动本脚本")
             print("并确保当前工作目录下存在Result.json")
+            
+#############################################addig
     elif cmd[:5]=="addig":
         try:
             cmdli=cmd[6:].split(" ")
@@ -226,7 +265,7 @@ while True:
             print("样例：\taddig re \\[s:.*?\\].*?")
             print("\taddig n [del]")
 
-
+#############################################addtr
     elif cmd[:5]=="addtr":
         try:
             cmdli=cmd[6:].split(" ")
@@ -248,7 +287,7 @@ while True:
             print("样例：\taddtr re 火.*?鲁.*? 火奴鲁鲁")
             print("\taddtr n 撸撸 火奴鲁鲁")
 
-
+################################################ld
     elif cmd[:2]=="ld":
         cmdchr=input("此操作是重载字典，输入q可返回，否则按回车继续：")
         if cmdchr=="q":
@@ -286,7 +325,7 @@ while True:
             print(igrefrom)
             print(igfrom)
 
-
+##############################################pass
     elif cmd[:4]=="pass":
         i=comment_process[0]
         tpi=i
@@ -329,7 +368,7 @@ while True:
             else:
                 print("无法理解的指令")
 
-
+##############################################manu
     elif cmd[:4]=="manu":
         print("此操作是输出处理第一个记录结果，需先运行ld和show")
         cmdchr=input("输入q可返回，否则按回车继续：")
@@ -353,7 +392,7 @@ while True:
                     cur_vote[ii]=1
             print(i)
             
-
+##############################################auto
     elif cmd[:4]=="auto":
         print("此操作是自动处理投票记录，需先运行ld")
         cmdchr=input("输入q可返回，否则按回车继续：")
@@ -386,9 +425,6 @@ while True:
                     users_id.pop(inte)
                     continue
                 elif i=='':
-                    # print("%s的处理结果："%tpi)
-                    # for jj in range(len(kansens)):
-                    # 	print(kansens[jj],cur_vote[jj])
                     print("已处理%s"%tpi)
                     votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
                     comment_process.pop(inte)
@@ -396,8 +432,12 @@ while True:
                     users_id.pop(inte)
                 else:
                     inte+=1
+                    
+###############################################ato
     elif cmd[:3]=="ato":
         print("剩余%d条记录因无法完美匹配无法自动处理"%len(comment_process))
+        
+##############################################show
     elif cmd[:4]=="show":
         try:
             showargv=int(cmd[5:])
@@ -414,6 +454,8 @@ while True:
         print("默认打印最近5条无法自动处理的记录：")
         for i in range(5):
             print(comment_process[i])
+            
+#############################################score
     elif cmd[:5]=="score":
         print("目前舰娘得票数：")
         for i in range(len(kansens)):

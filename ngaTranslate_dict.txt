@@ -3,3 +3,9 @@
 {"type": "n", "from": "\u706b\u52aa\u9c81\u9c81", "to": "\u706b\u5974\u9c81\u9c81"}
 {"type": "n", "from": "\u4e9a\u68cd", "to": "\u4e9a\u7279\u5170\u5927"}
 {"type": "n", "from": "\u706b\u59e8", "to": "\u706b\u5974\u9c81\u9c81"}
+{"type": "n", "from": "\u6d77\u5988", "to": "\u6d77\u4f26\u5a1c"}
+{"type": "n", "from": "\u5927\u54e5", "to": "\u5a01\u5c14\u58eb\u4eb2\u738b"}
+{"type": "n", "from": "\u50bb\u767d", "to": "\u4f0a\u4e3d\u838e\u767d\u5973\u738b"}
+{"type": "n", "from": "\u5973\u738b", "to": "\u4f0a\u4e3d\u838e\u767d\u5973\u738b"}
+{"type": "n", "from": "\u706b\u5974\u4e73\u4e73", "to": "\u706b\u5974\u9c81\u9c81"}
+{"type": "n", "from": "\u59b9\u59b9", "to": "\u72ec\u89d2\u517d"}

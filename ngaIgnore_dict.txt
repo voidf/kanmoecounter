@@ -15,3 +15,5 @@
 {"type": "re", "from": "\\[.*?\\].*?"}
 {"type": "n", "from": "\uff01"}
 {"type": "n", "from": "zsbd"}
+{"type": "n", "from": "\u8fd8\u6709"}
+{"type": "n", "from": "\u548c"}

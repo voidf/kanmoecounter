@@ -84,9 +84,14 @@ except:
             participants=re.findall(re.compile("jpg\\[/img\\]<br/><br/>(.*?)<br/><br/>\\[/quote\\].*?"),str(host))[0]
 
             global kansens
+            print(participants)
             kansens=participants.split("<br/>")
             global votes
             votes=[0 for ii in range(len(kansens))]
+            for ii in range(kansens.count('')):
+                tag=kansens.index('')
+                del kansens[tag]
+                del votes[tag]
             print(kansens)
             print(votes)
             os.system("pause")

@@ -11,6 +11,7 @@ comment_raw=[]#楼层投票原生字符串
 comment_ind=[]#楼层索引
 kansens=[]#参赛舰舰名
 votes=[]#参赛舰获票数
+
 floor=0
 try:
     with open("Result.json","r") as f:
@@ -45,7 +46,13 @@ except:
         print("警告：尚未建立舰名转换字典，新建文件ngaTranslate_dict.txt于本目录")
         translate_dict_temp=open("ngaTranslate_dict.txt","w")
         translate_dict_temp.close()
-
+    try:
+        print("请输入投票截止日期，留空则视为禁用投票截止计算")
+        print("格式:年月日时分")
+        print("例子:201903182030")
+        reply_time_before=int(input(">>>"))#投票日期
+    except:
+        reply_time_before=0
     lnk=input("请输入投票页链接，留空则用默认调试页")
     if lnk=='':
         lnk="https://bbs.nga.cn/read.php?tid=16626917"
@@ -81,6 +88,7 @@ except:
         global users_id
         global comment_raw
         global floor
+        global reply_time_before
         sp=BeautifulSoup(req.content,"html.parser")
         reply_list=sp.find_all("table",attrs={"class":"forumbox postbox"})
         if if_first==True:
@@ -89,7 +97,7 @@ except:
             participants=re.findall(re.compile("jpg\\[/img\\]<br/><br/>(.*?)<br/><br/>\\[/quote\\].*?"),str(host))[0]
 
             global kansens
-            print(participants)
+            #print(participants)
             kansens=participants.split("<br/>")
             global votes
             votes=[0 for ii in range(len(kansens))]
@@ -98,13 +106,21 @@ except:
                 del kansens[tag]
                 del votes[tag]
             print(kansens)
-            print(votes)
+            #print(votes)
             os.system("pause")
         #retrytime=20
         for i in reply_list:
             #print(str(i))
             flr=int(re.findall(re.compile('''postcontainer(.*?)["'].*?'''),str(i))[0])#'
-            
+            if reply_time_before>201903080240 and not if_first:
+                rpt=re.findall(re.compile('''title=['"]reply time["']>(.*?)</span></div>.*?'''),str(i))[0]
+                rpt=rpt.replace("-","")
+                rpt=rpt.replace(" ","")
+                rpt=rpt.replace(":","")
+                #print(rpt)
+                if int(rpt)>reply_time_before:
+                    print("检测到截止日期已过")
+                    raise NameError("Capture Completed")
             if flr<=floor:
                 # if retrytime>0:
                 #     retrytime-=1
@@ -328,28 +344,36 @@ while True:
                         igrefrom.append(cur_dict["from"])
                     elif cur_dict["type"]=="n":
                         igfrom.append(cur_dict["from"])
-            a1=len(igfrom)
-            a3=0
-            a2=a1-1 #对列表进行子字符串处理，利用冒泡排序
-            while a1>=0+a3:
-                a1=len(igfrom)
-                a2=a1-1
-                while a2>=0+a3:
+            a1=0
+            a2=1
+            while a1<len(igfrom)-1:#去重
+                a2=a1+1
+                while a2<len(igfrom):
+                    if igfrom[a1]==igfrom[a2]:
+                        igfrom.pop(a2)
+                    else:
+                        a2+=1
+                a1+=1
+            a1=0
+            a2=0
+            #对列表进行子字符串处理，利用冒泡排序
+            while a1<len(igfrom)-1:
+                a2=0
+                while a2<len(igfrom)-1-a1:
                     try:
-                        igfrom[a1].index(igfrom[a2])
-                        igfrom[a1],igfrom[a2]=swi(igfrom[a2],igfrom[a1])
-                        a1=a2
-                        a2=a1-1
+
+                        tmp=igfrom[a2+1].index(igfrom[a2])
+
+                        igfrom[a2],igfrom[a2+1]=swi(igfrom[a2],igfrom[a2+1])
                     except ValueError:
                         pass
-                    a2-=1
-                a3+=1
-
-            for i in igfrom:
-                with open("ngaIgnore_dict.txt","w") as fa:
+                    a2+=1
+                a1+=1
+            with open("ngaIgnore_dict.txt","w") as fa:
+                for i in igfrom:
                     fa.write(json.dumps({"type":"n","from":i})+"\n")
-            for i in igrefrom:
-                with open("ngaIgnore_dict.txt","a") as fa:
+            with open("ngaIgnore_dict.txt","a") as fa:            
+                for i in igrefrom:
                     fa.write(json.dumps({"type":"re","from":i})+"\n")
             print(trrefrom)
             print(trreto)
@@ -424,7 +448,7 @@ while True:
                     continue
                 elif i=='':
                     print("已处理\t%s"%tpi)
-                    log.write(("已处理\t%s:\n"%tpi)
+                    log.write("已处理\t%s:\n"%tpi)
                     for ii in range(len(cur_vote)):
                         log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
                     votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
@@ -450,8 +474,8 @@ while True:
             continue
         except:
             pass
-        print("show 欲显示的记录数；示例：")
-        print("show 23")
+        #print("show 欲显示的记录数；示例：")
+        #print("show 23")
         print("默认打印最近5条无法自动处理的记录：")
         for i in range(5):
             print(comment_process[i])

@@ -1,5 +1,10 @@
 import requests,re,os,sys,json,copy
 from bs4 import BeautifulSoup
+log=open("ngaVoteLog.txt","w")
+#https://bbs.nga.cn/read.php?tid=16683315&_ff=564
+#https://bbs.nga.cn/read.php?tid=16683351&_ff=564
+#https://bbs.nga.cn/read.php?tid=16683389&_ff=564
+#https://bbs.nga.cn/read.php?tid=16683435&_ff=564
 
 users_id=[]#投票用户id
 comment_raw=[]#楼层投票原生字符串
@@ -130,7 +135,7 @@ except:
             break
         page_integer+=1
 
-    comment_ind=[int(i) for i in range(len(comment_raw))]
+    comment_ind=[int(i+1) for i in range(len(comment_raw))]
 
 
     voted_uid=[]
@@ -146,6 +151,7 @@ except:
             p+=1
             if regdate>1551369600:
                 print("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%i)
+                log.write("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票\n"%i)
                 while i in users_id:
                     pos=users_id.index(i)
                     del users_id[pos]
@@ -156,6 +162,7 @@ except:
                 voted_uid.append(i)
             else:
                 print("发现用户%s发表了多个回复，只保留第一个"%i)
+                log.write("发现用户%s发表了多个回复，只保留第一个\n"%i)
                 while users_id.count(i)>1:
                     pos=users_id.index(i,users_id.index(i)+1)
                     del users_id[pos]
@@ -169,7 +176,7 @@ except:
     print("投票页面信息获取已经完成，切换到本地数据操作模式，输入h可查看帮助")
     comment_process=copy.deepcopy(comment_raw)
 
-log=open("ngaVoteLog.txt","w")
+
 
 trfrom=[]
 trto=[]
@@ -178,6 +185,9 @@ trreto=[]
 
 igfrom=[]
 igrefrom=[]
+
+def swi(a,b):
+    return b,a
 
 def chkdic(i):
     global trfrom
@@ -318,8 +328,29 @@ while True:
                         igrefrom.append(cur_dict["from"])
                     elif cur_dict["type"]=="n":
                         igfrom.append(cur_dict["from"])
-            a1=1
-            a2=0 #对列表进行子字符串处理，利用冒泡排序
+            a1=len(igfrom)
+            a3=0
+            a2=a1-1 #对列表进行子字符串处理，利用冒泡排序
+            while a1>=0+a3:
+                a1=len(igfrom)
+                a2=a1-1
+                while a2>=0+a3:
+                    try:
+                        igfrom[a1].index(igfrom[a2])
+                        igfrom[a1],igfrom[a2]=swi(igfrom[a2],igfrom[a1])
+                        a1=a2
+                        a2=a1-1
+                    except ValueError:
+                        pass
+                    a2-=1
+                a3+=1
+
+            for i in igfrom:
+                with open("ngaIgnore_dict.txt","w") as fa:
+                    fa.write(json.dumps({"type":"n","from":i})+"\n")
+            for i in igrefrom:
+                with open("ngaIgnore_dict.txt","a") as fa:
+                    fa.write(json.dumps({"type":"re","from":i})+"\n")
             print(trrefrom)
             print(trreto)
             print(trfrom)
@@ -348,7 +379,12 @@ while True:
             if askconf.isdigit():
                 cur_vote[int(askconf)]=cur_vote[int(askconf)]^1
             elif askconf=='':
+                if cur_vote.count(1)>3:
+                    print("警告：当前投票对象大于3个")
                 votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
+                log.write("手动计票\t 楼层：%d\t字符：%s\n"%(comment_ind[0],comment_process[0]))
+                for ii in range(len(cur_vote)):
+                    log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
                 comment_process.pop(0)
                 users_id.pop(0)
                 comment_ind.pop(0)
@@ -381,12 +417,16 @@ while True:
                 i=chkdic(comment_process[inte])
                 if cur_vote.count(1)>3:
                     print("投票对象大于3个，%s作废"%tpi)
+                    log.write("投票对象大于3个，%s作废\n"%tpi)
                     comment_process.pop(inte)
                     comment_ind.pop(inte)
                     users_id.pop(inte)
                     continue
                 elif i=='':
-                    print("已处理%s"%tpi)
+                    print("已处理\t%s"%tpi)
+                    log.write(("已处理\t%s:\n"%tpi)
+                    for ii in range(len(cur_vote)):
+                        log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
                     votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
                     comment_process.pop(inte)
                     comment_ind.pop(inte)

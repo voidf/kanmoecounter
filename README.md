@@ -30,7 +30,7 @@ Windows用户通过python官网安装的请使用pip install requests bs4来安�
 
 ## 2、运行ngacreeper.py
 
-## 3、关于Cookie：因为没有搞清楚nga的游客重定向机制，所以目前留了个我自己的邮箱号，还请大家爱护。一般情况下在Cookie过期前不用调整，但更推荐使用你自己的（如果你会提取自己的Cookie的话）。
+## 3、关于Cookie：使用了游客的Cookie，使用版主的可能可以抓到匿名用户的信息。
 
 ## 4、关于计票命令：
 

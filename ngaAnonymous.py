@@ -1,6 +1,6 @@
 import requests,re,os,sys,json,copy
 from bs4 import BeautifulSoup
-
+import time
 lnk="https://bbs.nga.cn/read.php?tid=16626917"
 ses=requests.session()
 hds={
@@ -21,11 +21,20 @@ print(req.headers)
 print(ses.headers)
 print(req.content.decode('gbk'))
 print("\n"*6)
+time.sleep(1)
 ckstr=re.findall(re.compile("lastvisit=.*?;"),req.headers["Set-Cookie"])[0]+" "
 ckstr+=re.findall(re.compile("ngaPassportUid=.*?;"),req.headers["Set-Cookie"])[0]+" "
 ckstr+=re.findall(re.compile("guestJs=.*?;"),req.content.decode('gbk','ignore'))[0][:-1]
 ses.headers["Cookie"]=ckstr
 req=ses.get(lnk+"&rand=233")
-print(req)
+print(req.status_code)
+print(req.headers)
+print(ses.headers)
+print(req.content.decode('gbk'))
+time.sleep(1)
+req=ses.get(lnk+"&rand=233")
+print("\n"*6)
+print(req.status_code)
+print(req.headers)
 print(ses.headers)
 print(req.content.decode('gbk'))

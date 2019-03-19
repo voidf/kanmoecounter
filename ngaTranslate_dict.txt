@@ -11,3 +11,9 @@
 {"type": "n", "from": "\u59b9\u59b9", "to": "\u72ec\u89d2\u517d"}
 {"type": "n", "from": "\u5357\u79d1\u8fbe\u4ed6", "to": "\u5357\u8fbe\u79d1\u4ed6"}
 {"type": "n", "from": "\u4e00\u62b9\u591a", "to": "\u72ec\u89d2\u517d"}
+{"type": "n", "from": "\u897f\u5f17", "to": "\u897f\u5f17\u5409\u5c3c\u4e9a"}
+{"type": "n", "from": "z46", "to": "Z46"}
+{"type": "re", "from": "[iI]58.*?", "to": "\u4f0a58"}
+{"type": "n", "from": "u557", "to": "U557"}
+{"type": "n", "from": "\u5854\u7237", "to": "\u5a01\u5947\u5854"}
+{"type": "re", "from": "[rR][jJ]", "to": "\u9f99\u9aa7"}

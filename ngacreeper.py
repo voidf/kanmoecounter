@@ -355,6 +355,39 @@ while True:
                         a2+=1
                 a1+=1
             a1=0
+            a2=1
+            while a1<len(trrefrom)-1:
+                a2=a1+1
+                while a2<len(trrefrom):
+                    if trrefrom[a1]==trrefrom[a2]:
+                        trrefrom.pop(a2)
+                        trreto.pop(a2)
+                    else:
+                        a2+=1
+                a1+=1
+            a1=0
+            a2=1
+            while a1<len(trfrom)-1:
+                a2=a1+1
+                while a2<len(trfrom):
+                    if trfrom[a1]==trfrom[a2]:
+                        trfrom.pop(a2)
+                        trto.pop(a2)
+                    else:
+                        a2+=1
+                a1+=1
+            a1=0
+            a2=1
+            while a1<len(igrefrom)-1:
+                a2=a1+1
+                while a2<len(igrefrom):
+                    if igrefrom[a1]==igrefrom[a2]:
+                        igrefrom.pop(a2)
+                    else:
+                        a2+=1
+                a1+=1
+                
+            a1=0
             a2=0
             #对列表进行子字符串处理，利用冒泡排序
             while a1<len(igfrom)-1:

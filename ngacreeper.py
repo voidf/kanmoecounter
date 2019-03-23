@@ -293,9 +293,31 @@ while True:
             print(kansens[i]+"\t"+" "+str(brutevote[i]))
 ###############################################dd
     elif cmd[:3]=="dig":
-        pass
+        try:
+            cmdli=cmd[4:].split(" ")
+            #if cmdli[]
+        except:
+            print("命令执行失败")
+            print("说明：\t删除忽略字典中指定的规则行")
+            print("\t请在使用前运行ld")
+            print("用法：\tdig 类型 序号")
+            print("序号请参考ld命令的返回，注意从0开始，并且每次删除后都会变动。")
+            print("\t其中类型包括re（正则表达式）和n（普通字串）")
+            print("样例：\tdig n 3")
+            print("\tdig re 1")
     elif cmd[:3]=="dtr":
-        pass
+        try:
+            cmdli=cmd[4:].split(" ")
+        except:
+            print("命令执行失败")
+            print("说明：\t删除转义字典中指定的规则行")
+            print("\t请在使用前运行ld")
+            print("用法：\tdig 类型 序号")
+            print("序号请参考ld命令的返回，注意从0开始，并且每次删除后都会变动。")
+            print("\t其中类型包括re（正则表达式）和n（普通字串）")
+            print("样例：\tdtr n 3")
+            print("\tdtr re 1")
+
 
 #############################################save
     elif cmd[:4]=="save":

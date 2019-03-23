@@ -251,17 +251,22 @@ def chkdic(i):
     
     for ii in range(len(trfrom)):
         i=i.replace(trfrom[ii],trto[ii])
-        for ii in range(len(kansens)):
-            if i.find(kansens[ii])!=-1:
-                i=i.replace(kansens[ii],'')
-                cur_vote[ii]=1
+        for iii in range(len(kansens)):
+            if i.find(kansens[iii])!=-1:
+                i=i.replace(kansens[iii],'')
+                cur_vote[iii]=1
         
     for ii in range(len(trrefrom)):
         i=re.sub(trrefrom[ii],trreto[ii],i)
-        for ii in range(len(kansens)):
-            if i.find(kansens[ii])!=-1:
-                i=i.replace(kansens[ii],'')
-                cur_vote[ii]=1
+        for iii in range(len(kansens)):
+            if i.find(kansens[iii])!=-1:
+                i=i.replace(kansens[iii],'')
+                cur_vote[iii]=1
+
+    for ii in range(len(kansens)):
+        if i .find(kansens[ii])!=-1:
+            i=i.replace(kansens[ii],'')
+            cur_vote[ii]=1
 
     return i
 
@@ -282,13 +287,10 @@ while True:
         print("这里是暴力计数，将剩余评论一次计完，忽略未完全匹配的结果。")
         print("不会影响主计票的进度，仅用于估计和参考。")
         brutevote=copy.deepcopy(votes)
-        #brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+
         for i in comment_process:
             t=chkdic(i)
-            for j in range(len(kansens)):
-                if i.find(kansens[j])!=-1:
-                    i.replace(kansens[j])
-                    cur_vote[j]=1
+
             if cur_vote.count(1)>3:
                 print("%s 投票对象大于3个，作废"%i)
             else:
@@ -610,7 +612,11 @@ while True:
             except:
                 pass
             if askconf.isdigit():
-                cur_vote[int(askconf)]=cur_vote[int(askconf)]^1
+                try:
+                    cur_vote[int(askconf)]=cur_vote[int(askconf)]^1
+                except IndexError:
+                    print("数组越界")
+                    continue
             elif askconf=='':
                 if cur_vote.count(1)>3:
                     print("警告：当前投票对象大于3个")

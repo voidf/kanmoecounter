@@ -15,18 +15,22 @@ class ngaC():
         
         for ii in range(len(self.trfrom)):
             i=i.replace(self.trfrom[ii],self.trto[ii])
-            for ii in range(len(self.kansens)):
-                if i.find(self.kansens[ii])!=-1:
-                    i=i.replace(self.kansens[ii],'')
-                    self.cur_vote[ii]=1
+            for iii in range(len(self.kansens)):
+                if i.find(self.kansens[iii])!=-1:
+                    i=i.replace(self.kansens[iii],'')
+                    self.cur_vote[iii]=1
             
         for ii in range(len(self.trrefrom)):
             i=re.sub(self.trrefrom[ii],self.trreto[ii],i)
-            for ii in range(len(self.kansens)):
-                if i.find(self.kansens[ii])!=-1:
-                    i=i.replace(self.kansens[ii],'')
-                    self.cur_vote[ii]=1
+            for iii in range(len(self.kansens)):
+                if i.find(self.kansens[iii])!=-1:
+                    i=i.replace(self.kansens[iii],'')
+                    self.cur_vote[iii]=1
 
+        for ii in range(len(self.kansens)):
+            if i .find(self.kansens[ii])!=-1:
+                i=i.replace(self.kansens[ii],'')
+                self.cur_vote[ii]=1
         return i
 
 
@@ -270,10 +274,7 @@ class ngaC():
                 brutevote=copy.deepcopy(self.votes)
                 for i in self.comment_process:
                     t=self.chkdic(i)
-                    for j in range(len(self.kansens)):
-                        if i.find(self.kansens[j])!=-1:
-                            i.replace(self.kansens[j])
-                            self.cur_vote[j]=1
+
                     if self.cur_vote.count(1)>3:
                         print("%s 投票对象大于3个，作废"%i)
                     else:
@@ -595,7 +596,11 @@ class ngaC():
                     except:
                         pass
                     if askconf.isdigit():
-                        self.cur_vote[int(askconf)]=self.cur_vote[int(askconf)]^1
+                        try:
+                            self.cur_vote[int(askconf)]=self.cur_vote[int(askconf)]^1
+                        except IndexError:
+                            print("数组越界")
+                            continue
                     elif askconf=='':
                         if self.cur_vote.count(1)>3:
                             print("警告：当前投票对象大于3个")

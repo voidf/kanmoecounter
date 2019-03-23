@@ -44,6 +44,8 @@ class ngaC():
             self.kansens=participants.split("<br/>")
 
             self.votes=[0 for ii in range(len(self.kansens))]
+            self.cur_vote=[0 for ii in range(len(self.kansens))]
+
             for ii in range(self.kansens.count('')):
                 tag=self.kansens.index('')
                 del self.kansens[tag]
@@ -85,7 +87,7 @@ class ngaC():
         self.kansens=[]#参赛舰舰名
         self.votes=[]#参赛舰获票数
 
-      self.  floor=0
+        self.floor=0
         try:
             with open("Result.json","r") as f:
                 firstline=json.loads(f.readline())
@@ -97,6 +99,7 @@ class ngaC():
                             raise NameError("Reload Denied")
                         self.kansens=firstline["kansens"]
                         self.votes=firstline["votes"]
+                        self.cur_vote=[0 for ii in range(len(self.kansens))]
                         self.comment_process=[]
                         for i in f:
                             js=json.loads(i)
@@ -123,9 +126,9 @@ class ngaC():
                 print("请输入投票截止日期，留空则视为禁用投票截止计算")
                 print("格式:年月日时分")
                 print("例子:201903182030")
-                reply_time_before=int(input(">>>"))#投票日期
+                self.reply_time_before=int(input(">>>"))#投票日期
             except:
-                reply_time_before=0
+                self.reply_time_before=0
             lnk=input("请输入投票页链接，留空则用默认调试页")
             if lnk=='':
                 lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
@@ -184,7 +187,7 @@ class ngaC():
                     break
                 page_integer+=1
 
-            self.comment_ind=[int(i+1) for i in range(len(comment_raw))]
+            self.comment_ind=[int(i+1) for i in range(len(self.comment_raw))]
 
 
             voted_uid=[]
@@ -196,7 +199,7 @@ class ngaC():
                 for i in self.users_id:#根据规则进行一些处理
                     check_reg=ses.get("https://bbs.nga.cn/nuke.php?__lib=ucp&__act=get&lite=js&uid=%s"%i,headers=hds).content.decode("gbk","replace")
                     try:
-                    regdate=int(re.findall(re.compile('''"regdate":(.*?),.*?'''),check_reg)[0])
+                        regdate=int(re.findall(re.compile('''"regdate":(.*?),.*?'''),check_reg)[0])
                     except IndexError:
                         print("找不到注册时间，用户%s,内容:%s"%(i,check_reg))
                         if int(i)==-1:
@@ -213,8 +216,8 @@ class ngaC():
                         while i in self.users_id:
                             pos=self.users_id.index(i)
                             del self.users_id[pos]
-                            del comment_raw[pos]
-                            del comment_ind[pos]
+                            del self.comment_raw[pos]
+                            del self.comment_ind[pos]
                         continue
                     elif i not in voted_uid:
                         voted_uid.append(i)
@@ -265,16 +268,16 @@ class ngaC():
                 print("这里是暴力计数，将剩余评论一次计完，忽略未完全匹配的结果。")
                 print("不会影响主计票的进度，仅用于估计和参考。")
                 brutevote=copy.deepcopy(self.votes)
-                brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+                #brutevote=[brutevote[ii]+self.cur_vote[ii] for ii in range(len(brutevote))]
                 for i in self.comment_process:
-                    t=chkdic(i)
-                    if cur_vote.count(1)>3:
+                    t=self.chkdic(i)
+                    if self.cur_vote.count(1)>3:
                         print("%s 投票对象大于3个，作废"%i)
                     else:
-                        brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+                        brutevote=[brutevote[ii]+self.cur_vote[ii] for ii in range(len(brutevote))]
                 print("暴力计票结果：")
-                for i in range(len(kansens)):
-                    print(kansens[i]+"\t"+" "+str(brutevote[i]))
+                for i in range(len(self.kansens)):
+                    print(self.kansens[i]+"\t"+" "+str(brutevote[i]))
         ###############################################dd
             elif cmd[:3]=="dig":
                 try:
@@ -363,15 +366,15 @@ class ngaC():
                 else:
                     with open("给人看的结果.txt","w") as fwh:
                         fwh.write("舰娘当前计分：\n")
-                        for i in range(len(kansens)):
-                            fwh.write(kansens[i]+":"+str(self.votes[i])+"\n")
+                        for i in range(len(self.kansens)):
+                            fwh.write(self.kansens[i]+":"+str(self.votes[i])+"\n")
                         fwh.write("============================================\n")
                         fwh.write("楼层\t用户id\t评论内容\n")
                         with open("Result.json","w") as fw:
-                            fw.write(json.dumps({"kansens":kansens,"votes":self.votes})+"\n")
+                            fw.write(json.dumps({"kansens":self.kansens,"votes":self.votes})+"\n")
                             for i in range(len(self.comment_process)):
-                                fw.write(json.dumps({"floor":comment_ind[i],"user":users_id[i],"comment":self.comment_process[i]})+"\n")
-                                fwh.write(str(comment_ind[i])+"\t"+str(users_id[i])+"\t"+self.comment_process[i]+"\n")
+                                fw.write(json.dumps({"floor":self.comment_ind[i],"user":self.users_id[i],"comment":self.comment_process[i]})+"\n")
+                                fwh.write(str(self.comment_ind[i])+"\t"+str(self.users_id[i])+"\t"+self.comment_process[i]+"\n")
                     print("记录已经保存到当前目录")
                     print("Result.json可用于重载进度")
                     print("重载方法为重新启动本脚本")
@@ -574,32 +577,32 @@ class ngaC():
             elif cmd[:4]=="pass":
                 i=self.comment_process[0]
                 tpi=i
-                i=chkdic(i)
+                i=self.chkdic(i)
                 while True:		
                     print(tpi+"的处理结果：")
-                    for jj in range(len(kansens)):
-                        print(str(jj)+" "+kansens[jj]+" "+str(cur_vote[jj]))
+                    for jj in range(len(self.kansens)):
+                        print(str(jj)+" "+self.kansens[jj]+" "+str(self.cur_vote[jj]))
                 
                     askconf=input("输入q以离开,或输入舰娘名或对应下标以修改此票，否则回车将此票计入:")
                     if askconf=="q":
                         break
                     try:
-                        tag=kansens.index(askconf)
-                        cur_vote[tag]=cur_vote[tag]^1
+                        tag=self.kansens.index(askconf)
+                        self.cur_vote[tag]=self.cur_vote[tag]^1
                     except:
                         pass
                     if askconf.isdigit():
-                        cur_vote[int(askconf)]=cur_vote[int(askconf)]^1
+                        self.cur_vote[int(askconf)]=self.cur_vote[int(askconf)]^1
                     elif askconf=='':
-                        if cur_vote.count(1)>3:
+                        if self.cur_vote.count(1)>3:
                             print("警告：当前投票对象大于3个")
-                        self.votes=[self.votes[ii]+cur_vote[ii] for ii in range(len(self.votes))]
-                        self.log.write("手动计票\t 楼层：%d\t字符：%s\n"%(comment_ind[0],self.comment_process[0]))
-                        for ii in range(len(cur_vote)):
-                            self.log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
+                        self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
+                        self.log.write("手动计票\t 楼层：%d\t字符：%s\n"%(self.comment_ind[0],self.comment_process[0]))
+                        for ii in range(len(self.cur_vote)):
+                            self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
                         self.comment_process.pop(0)
-                        users_id.pop(0)
-                        comment_ind.pop(0)
+                        self.users_id.pop(0)
+                        self.comment_ind.pop(0)
                         break
                     else:
                         print("无法理解的指令")
@@ -613,7 +616,7 @@ class ngaC():
                 else:
                     i=self.comment_process[0]
                     tpi=i
-                    i=chkdic(i)
+                    i=self.chkdic(i)
                     print(i)
                     
         ##############################################auto
@@ -626,23 +629,23 @@ class ngaC():
                     inte=0
                     while inte < len(self.comment_process):
                         tpi=self.comment_process[inte]
-                        i=chkdic(self.comment_process[inte])
-                        if cur_vote.count(1)>3:
+                        i=self.chkdic(self.comment_process[inte])
+                        if self.cur_vote.count(1)>3:
                             print("投票对象大于3个，%s作废"%tpi)
                             self.log.write("投票对象大于3个，%s作废\n"%tpi)
                             self.comment_process.pop(inte)
-                            comment_ind.pop(inte)
-                            users_id.pop(inte)
+                            self.comment_ind.pop(inte)
+                            self.users_id.pop(inte)
                             continue
                         elif i=='':
                             print("已处理\t%s"%tpi)
                             self.log.write("已处理\t%s:\n"%tpi)
-                            for ii in range(len(cur_vote)):
-                                self.log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
-                            self.votes=[self.votes[ii]+cur_vote[ii] for ii in range(len(self.votes))]
+                            for ii in range(len(self.cur_vote)):
+                                self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
+                            self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
                             self.comment_process.pop(inte)
-                            comment_ind.pop(inte)
-                            users_id.pop(inte)
+                            self.comment_ind.pop(inte)
+                            self.users_id.pop(inte)
                         else:
                             inte+=1
                             
@@ -671,8 +674,11 @@ class ngaC():
         #############################################score
             elif cmd[:5]=="score":
                 print("目前舰娘得票数：")
-                for i in range(len(kansens)):
-                    print(kansens[i]+"\t"+" "+str(self.votes[i]))
+                for i in range(len(self.kansens)):
+                    print(self.kansens[i]+"\t"+" "+str(self.votes[i]))
             else:
                 print("无法理解的命令：%s"%cmd)
         self.log.close()
+
+if __name__=="__main__":
+    ngac=ngaC()

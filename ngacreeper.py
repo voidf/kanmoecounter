@@ -266,6 +266,7 @@ def chkdic(i):
     return i
 
 while True:
+    log.flush()
     cmd=input(">>>")
     if cmd=="h":
         print("可用命令：addig addtr ld auto show ato score manu pass save brute dig dtr q")
@@ -295,7 +296,30 @@ while True:
     elif cmd[:3]=="dig":
         try:
             cmdli=cmd[4:].split(" ")
-            #if cmdli[]
+            if cmdli[0]=="n" and cmdli[1].isdigit():
+                try:
+                    del igfrom[int(cmdli[1])]
+                except IndexError:
+                    print("数组越界")
+                except:
+                    print("格式错误")
+            elif cmdli[0]=="re" and cmdli[1].isdigit():
+                try:
+                    del igrefrom[int(cmdli[1])]
+                except IndexError:
+                    print("数组越界")
+                    raise NameError("数组越界")
+                except:
+                    print("格式错误")
+                    raise NameError("格式错误")
+            else:
+                raise NameError("参数不明")
+            with open("ngaIgnore_dict.txt","w") as fa:
+                for i in igfrom:
+                    fa.write(json.dumps({"type":"n","from":i})+"\n")
+            with open("ngaIgnore_dict.txt","a") as fa:      
+                for i in igrefrom:
+                    fa.write(json.dumps({"type":"re","from":i})+"\n")
         except:
             print("命令执行失败")
             print("说明：\t删除忽略字典中指定的规则行")
@@ -304,10 +328,38 @@ while True:
             print("序号请参考ld命令的返回，注意从0开始，并且每次删除后都会变动。")
             print("\t其中类型包括re（正则表达式）和n（普通字串）")
             print("样例：\tdig n 3")
-            print("\tdig re 1")
+            print("\tdig re 0")#RE0还行
+
+
     elif cmd[:3]=="dtr":
         try:
             cmdli=cmd[4:].split(" ")
+            if cmdli[0]=="n" and cmdli[1].isdigit():
+                try:
+                    del trfrom[int(cmdli[1])]
+                    del trto[int(cmdli[1])]
+                except IndexError:
+                    print("数组越界")
+                except:
+                    print("格式错误")
+            elif cmdli[0]=="re" and cmdli[1].isdigit():
+                try:
+                    del trrefrom[int(cmdli[1])]
+                    del trreto[int(cmdli[1])]
+                except IndexError:
+                    print("数组越界")
+                    raise NameError("数组越界")
+                except:
+                    print("格式错误")
+                    raise NameError("格式错误")
+            else:
+                raise NameError("参数不明")
+            with open("ngaTranslate_dict.txt","w") as fa:
+                for i in range(len(trfrom)):
+                    fa.write(json.dumps({"type":"n","from":trfrom[i],"to":trto[i]})+"\n")
+            with open("ngaTranslate_dict.txt","a") as fa:      
+                for i in range(len(trrefrom)):
+                    fa.write(json.dumps({"type":"re","from":trrefrom[i],"to":trreto[i]})+"\n")
         except:
             print("命令执行失败")
             print("说明：\t删除转义字典中指定的规则行")

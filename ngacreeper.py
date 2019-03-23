@@ -268,9 +268,35 @@ def chkdic(i):
 while True:
     cmd=input(">>>")
     if cmd=="h":
-        print("可用命令：addig addtr ld auto show ato score manu pass save brute ig tr")
+        print("可用命令：addig addtr ld auto show ato score manu pass save brute dig dtr q")
         print("输入命令以查看具体用法")
-        
+    elif cmd=="q":
+        confirm=input("退出，确认？(Y/n)")
+        if confirm=="n":
+            continue
+        else:
+            break
+############################################brute
+    elif cmd[:5]=="brute":
+        print("这里是暴力计数，将剩余评论一次计完，忽略未完全匹配的结果。")
+        print("不会影响主计票的进度，仅用于估计和参考。")
+        brutevote=copy.deepcopy(votes)
+        brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+        for i in comment_process:
+            t=chkdic(i)
+            if cur_vote.count(1)>3:
+                print("%s 投票对象大于3个，作废"%i)
+            else:
+                brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+        print("暴力计票结果：")
+        for i in range(len(kansens)):
+            print(kansens[i]+"\t"+" "+str(brutevote[i]))
+###############################################dd
+    elif cmd[:3]=="dig":
+        pass
+    elif cmd[:3]=="dtr":
+        pass
+
 #############################################save
     elif cmd[:4]=="save":
         print("此操作将会把剩余未处理的记录保存为文件，输入q以离开")
@@ -495,7 +521,7 @@ while True:
         while True:		
             print(tpi+"的处理结果：")
             for jj in range(len(kansens)):
-                print(str(jj)+" "+kansens[jj]|+" "+str(cur_vote[jj]))
+                print(str(jj)+" "+kansens[jj]+" "+str(cur_vote[jj]))
         
             askconf=input("输入q以离开,或输入舰娘名或对应下标以修改此票，否则回车将此票计入:")
             if askconf=="q":

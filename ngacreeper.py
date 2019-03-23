@@ -282,9 +282,13 @@ while True:
         print("这里是暴力计数，将剩余评论一次计完，忽略未完全匹配的结果。")
         print("不会影响主计票的进度，仅用于估计和参考。")
         brutevote=copy.deepcopy(votes)
-        brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
+        #brutevote=[brutevote[ii]+cur_vote[ii] for ii in range(len(brutevote))]
         for i in comment_process:
             t=chkdic(i)
+            for j in range(len(kansens)):
+                if i.find(kansens[j])!=-1:
+                    i.replace(kansens[j])
+                    cur_vote[j]=1
             if cur_vote.count(1)>3:
                 print("%s 投票对象大于3个，作废"%i)
             else:

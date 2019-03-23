@@ -268,9 +268,12 @@ class ngaC():
                 print("这里是暴力计数，将剩余评论一次计完，忽略未完全匹配的结果。")
                 print("不会影响主计票的进度，仅用于估计和参考。")
                 brutevote=copy.deepcopy(self.votes)
-                #brutevote=[brutevote[ii]+self.cur_vote[ii] for ii in range(len(brutevote))]
                 for i in self.comment_process:
                     t=self.chkdic(i)
+                        for j in range(len(self.kansens)):
+                            if i.find(self.kansens[j])!=-1:
+                                i.replace(self.kansens[j])
+                                self.cur_vote[j]=1
                     if self.cur_vote.count(1)>3:
                         print("%s 投票对象大于3个，作废"%i)
                     else:

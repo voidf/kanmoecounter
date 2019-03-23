@@ -77,7 +77,8 @@ except:
                 raise NameError("Fake Cookie!")
         except:
             req=ses.get(lnk,headers=hds)
-            print(req.headers)
+            for k,v in req.headers.items():
+                print(str(k)+": "+str(v) )
             ckstr=re.findall(re.compile("lastvisit=.*?;"),req.headers["Set-Cookie"])[0]+" "
             ckstr+=re.findall(re.compile("ngaPassportUid=.*?;"),req.headers["Set-Cookie"])[0]+" "
             ckstr+=re.findall(re.compile("guestJs=.*?;"),req.content.decode('gbk','ignore'))[0][:-1]
@@ -117,9 +118,12 @@ except:
                 tag=kansens.index('')
                 del kansens[tag]
                 del votes[tag]
-            print(kansens)
+            pstr=""
+            for pi in kansens:
+                pstr+=pi+" "
+            print(pstr)
             #print(votes)
-            os.system("pause")
+            #os.system("pause")
         #retrytime=20
         for i in reply_list:
             #print(str(i))
@@ -145,8 +149,8 @@ except:
             com=re.findall(re.compile('''<span class=['"]postcontent ubbcode['"] id=['"]postcontent.+['"]>(.*?)</span>.*?'''),str(i))#'
             users_id.append(uid[0])
             comment_raw.append(com[0])
-        print(len(users_id))
-        print(len(comment_raw))
+        print(str(len(users_id)))
+        print(str(len(comment_raw)))
         #except:
             #pass
 
@@ -177,14 +181,14 @@ except:
             try:
              regdate=int(re.findall(re.compile('''"regdate":(.*?),.*?'''),check_reg)[0])
             except IndexError:
-                print("找不到注册时间，用户%s,内容"%i,check_reg)
+                print("找不到注册时间，用户%s,内容:%s"%(i,check_reg))
                 if int(i)==-1:
                     print("uid为-1，判断为匿名用户")
                 p+=1
                 continue
             #print(p/len(users_id)*100,"%",sep='')
             if p*100//len(users_id)%10==0:
-                print(p/len(users_id)*100,"%",sep='')
+                print(str(p/len(users_id)*100)+"%")
             p+=1
             if regdate>1551369600:
                 print("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%i)
@@ -264,7 +268,7 @@ def chkdic(i):
 while True:
     cmd=input(">>>")
     if cmd=="h":
-        print("可用命令：addig addtr ld auto show ato score manu pass save")
+        print("可用命令：addig addtr ld auto show ato score manu pass save brute ig tr")
         print("输入命令以查看具体用法")
         
 #############################################save
@@ -294,7 +298,8 @@ while True:
     elif cmd[:5]=="addig":
         try:
             cmdli=cmd[6:].split(" ")
-            print(cmdli)
+            #print(cmdli)
+            print("添加类型：%s；关键字：%s"%(cmdli[0],cmdli[1]))
             if cmdli[0]=="re":
                 with open("ngaIgnore_dict.txt","a") as fa:
                     fa.write(json.dumps({"type":"re","from":cmdli[1]})+"\n")
@@ -316,7 +321,8 @@ while True:
     elif cmd[:5]=="addtr":
         try:
             cmdli=cmd[6:].split(" ")
-            print(cmdli)
+            #print(cmdli)
+            print("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],cmdli[1],cmdli[2]))
             if cmdli[0]=="re":
                 with open("ngaTranslate_dict.txt","a") as fa:
                     fa.write(json.dumps({"type":"re","from":cmdli[1],"to":cmdli[2]})+"\n")
@@ -452,19 +458,34 @@ while True:
             with open("ngaIgnore_dict.txt","a") as fa:      
                 for i in igrefrom:
                     fa.write(json.dumps({"type":"re","from":i})+"\n")
-            with open("ngaIgnore_dict.txt","w") as fa:
+            with open("ngaTranslate_dict.txt","w") as fa:
                 for i in range(len(trfrom)):
                     fa.write(json.dumps({"type":"n","from":trfrom[i],"to":trto[i]})+"\n")
-            with open("ngaIgnore_dict.txt","a") as fa:      
+            with open("ngaTranslate_dict.txt","a") as fa:      
                 for i in range(len(trrefrom)):
                     fa.write(json.dumps({"type":"re","from":trrefrom[i],"to":trreto[i]})+"\n")
-
-            print(trrefrom)
-            print(trreto)
-            print(trfrom)
-            print(trto)
-            print(igrefrom)
-            print(igfrom)
+            print("\n转义字典正则部分：")
+            print("序号\t表达式\t转换内容")
+            for i in range(len(trrefrom)):
+                print(str(i)+"\t"+trrefrom[i]+"\t"+trreto[i])
+            print("\n转义字典通常部分：")
+            print("序号\t关键字\t替换内容")
+            for i in range(len(trfrom)):
+                print(str(i)+"\t"+trfrom[i]+"\t"+trto[i])
+            print("\n忽略字典正则：")
+            print("序号\t表达式")
+            for i in range(len(igrefrom)):
+                print(str(i)+"\t"+igrefrom[i])
+            print("\n忽略字典通常：")
+            print("序号\t关键字")
+            for i in range(len(igfrom)):
+                print(str(i)+"\t"+igfrom[i])
+            # print(trrefrom)
+            # print(trreto)
+            # print(trfrom)
+            # print(trto)
+            # print(igrefrom)
+            # print(igfrom)
 
 ##############################################pass
     elif cmd[:4]=="pass":
@@ -472,9 +493,9 @@ while True:
         tpi=i
         i=chkdic(i)
         while True:		
-            print(tpi,"的处理结果：")
+            print(tpi+"的处理结果：")
             for jj in range(len(kansens)):
-                print(jj,kansens[jj],cur_vote[jj])
+                print(str(jj)+" "+kansens[jj]|+" "+str(cur_vote[jj]))
         
             askconf=input("输入q以离开,或输入舰娘名或对应下标以修改此票，否则回车将此票计入:")
             if askconf=="q":
@@ -568,7 +589,7 @@ while True:
     elif cmd[:5]=="score":
         print("目前舰娘得票数：")
         for i in range(len(kansens)):
-            print(kansens[i],"\t",votes[i])
+            print(kansens[i]+"\t"+" "+str(votes[i]))
     else:
         print("无法理解的命令：%s"%cmd)
 log.close()

@@ -270,10 +270,10 @@ class ngaC():
                 brutevote=copy.deepcopy(self.votes)
                 for i in self.comment_process:
                     t=self.chkdic(i)
-                        for j in range(len(self.kansens)):
-                            if i.find(self.kansens[j])!=-1:
-                                i.replace(self.kansens[j])
-                                self.cur_vote[j]=1
+                    for j in range(len(self.kansens)):
+                        if i.find(self.kansens[j])!=-1:
+                            i.replace(self.kansens[j])
+                            self.cur_vote[j]=1
                     if self.cur_vote.count(1)>3:
                         print("%s 投票对象大于3个，作废"%i)
                     else:

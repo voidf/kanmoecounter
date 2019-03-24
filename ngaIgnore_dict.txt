@@ -17,6 +17,7 @@
 {"type": "n", "from": "\u8d75\u56db"}
 {"type": "n", "from": "/"}
 {"type": "n", "from": "\u5929\u4e0b\u7b2c\u4e00"}
+{"type": "n", "from": "\u5355\u63a8"}
 {"type": "re", "from": "\\[s:.*?\\].*?"}
 {"type": "re", "from": "\\[.*?\\].*?"}
 {"type": "re", "from": "[zZ][sS][bB][dD]"}

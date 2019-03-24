@@ -403,7 +403,7 @@ while True:
 #############################################addig
     elif cmd[:5]=="addig":
         try:
-            cmdli=cmd[6:].split(" ")
+            cmdli=cmd[6:].split(" ",1)
             #print(cmdli)
             print("添加类型：%s；关键字：%s"%(cmdli[0],cmdli[1]))
             if cmdli[0]=="re":
@@ -428,13 +428,13 @@ while True:
         try:
             cmdli=cmd[6:].split(" ")
             #print(cmdli)
-            print("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],cmdli[1],cmdli[2]))
+            print("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],''.join(cmdli[1:-1]),cmdli[-1]))
             if cmdli[0]=="re":
                 with open("ngaTranslate_dict.txt","a") as fa:
-                    fa.write(json.dumps({"type":"re","from":cmdli[1],"to":cmdli[2]})+"\n")
+                    fa.write(json.dumps({"type":"re","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
             elif cmdli[0]=="n":
                 with open("ngaTranslate_dict.txt","a") as fa:
-                    fa.write(json.dumps({"type":"n","from":cmdli[1],"to":cmdli[2]})+"\n")
+                    fa.write(json.dumps({"type":"n","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
             else:
                 raise NameError("参数错误")
         except:

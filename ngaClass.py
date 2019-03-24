@@ -1,3 +1,4 @@
+#coding:utf-8
 import requests,re,os,sys,json,copy,time
 from bs4 import BeautifulSoup
 #https://bbs.nga.cn/read.php?tid=16683315&_ff=564 小组A
@@ -7,7 +8,8 @@ from bs4 import BeautifulSoup
 class ngaC():
     def chkdic(self,i):
         self.cur_vote=[0 for ii in range(len(self.kansens))]
-        
+        #print(self.igfrom)
+        #print(self.trfrom)
         for ii in range(len(self.igrefrom)):
             i=re.sub(self.igrefrom[ii],'',i)
         for ii in range(len(self.igfrom)):
@@ -288,14 +290,14 @@ class ngaC():
                     cmdli=cmd[4:].split(" ")
                     if cmdli[0]=="n" and cmdli[1].isdigit():
                         try:
-                            del igfrom[int(cmdli[1])]
+                            del self.igfrom[int(cmdli[1])]
                         except IndexError:
                             print("数组越界")
                         except:
                             print("格式错误")
                     elif cmdli[0]=="re" and cmdli[1].isdigit():
                         try:
-                            del igrefrom[int(cmdli[1])]
+                            del self.igrefrom[int(cmdli[1])]
                         except IndexError:
                             print("数组越界")
                             raise NameError("数组越界")
@@ -305,10 +307,10 @@ class ngaC():
                     else:
                         raise NameError("参数不明")
                     with open("ngaIgnore_dict.txt","w") as fa:
-                        for i in igfrom:
+                        for i in self.igfrom:
                             fa.write(json.dumps({"type":"n","from":i})+"\n")
                     with open("ngaIgnore_dict.txt","a") as fa:      
-                        for i in igrefrom:
+                        for i in self.igrefrom:
                             fa.write(json.dumps({"type":"re","from":i})+"\n")
                 except:
                     print("命令执行失败")
@@ -326,16 +328,16 @@ class ngaC():
                     cmdli=cmd[4:].split(" ")
                     if cmdli[0]=="n" and cmdli[1].isdigit():
                         try:
-                            del trfrom[int(cmdli[1])]
-                            del trto[int(cmdli[1])]
+                            del self.trfrom[int(cmdli[1])]
+                            del self.trto[int(cmdli[1])]
                         except IndexError:
                             print("数组越界")
                         except:
                             print("格式错误")
                     elif cmdli[0]=="re" and cmdli[1].isdigit():
                         try:
-                            del trrefrom[int(cmdli[1])]
-                            del trreto[int(cmdli[1])]
+                            del self.trrefrom[int(cmdli[1])]
+                            del self.trreto[int(cmdli[1])]
                         except IndexError:
                             print("数组越界")
                             raise NameError("数组越界")
@@ -345,11 +347,11 @@ class ngaC():
                     else:
                         raise NameError("参数不明")
                     with open("ngaTranslate_dict.txt","w") as fa:
-                        for i in range(len(trfrom)):
-                            fa.write(json.dumps({"type":"n","from":trfrom[i],"to":trto[i]})+"\n")
+                        for i in range(len(self.trfrom)):
+                            fa.write(json.dumps({"type":"n","from":self.trfrom[i],"to":self.trto[i]})+"\n")
                     with open("ngaTranslate_dict.txt","a") as fa:      
-                        for i in range(len(trrefrom)):
-                            fa.write(json.dumps({"type":"re","from":trrefrom[i],"to":trreto[i]})+"\n")
+                        for i in range(len(self.trrefrom)):
+                            fa.write(json.dumps({"type":"re","from":self.trrefrom[i],"to":self.trreto[i]})+"\n")
                 except:
                     print("命令执行失败")
                     print("说明：\t删除转义字典中指定的规则行")
@@ -387,7 +389,7 @@ class ngaC():
         #############################################addig
             elif cmd[:5]=="addig":
                 try:
-                    cmdli=cmd[6:].split(" ")
+                    cmdli=cmd[6:].split(" ",1)
                     #print(cmdli)
                     print("添加类型：%s；关键字：%s"%(cmdli[0],cmdli[1]))
                     if cmdli[0]=="re":
@@ -412,13 +414,13 @@ class ngaC():
                 try:
                     cmdli=cmd[6:].split(" ")
                     #print(cmdli)
-                    print("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],cmdli[1],cmdli[2]))
+                    print("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],''.join(cmdli[1:-1]),cmdli[-1]))
                     if cmdli[0]=="re":
                         with open("ngaTranslate_dict.txt","a") as fa:
-                            fa.write(json.dumps({"type":"re","from":cmdli[1],"to":cmdli[2]})+"\n")
+                            fa.write(json.dumps({"type":"re","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
                     elif cmdli[0]=="n":
                         with open("ngaTranslate_dict.txt","a") as fa:
-                            fa.write(json.dumps({"type":"n","from":cmdli[1],"to":cmdli[2]})+"\n")
+                            fa.write(json.dumps({"type":"n","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
                     else:
                         raise NameError("参数错误")
                 except:
@@ -426,6 +428,7 @@ class ngaC():
                     print("说明：\t添加指定的字符串到转义字典中")
                     print("\t如果回复楼层包含这些字符串则转换为相应舰娘名")
                     print("用法：\taddtr 类型 别名字符串 原名字符串")
+                    print("原名字符串请不要加空格")
                     print("\t其中类型支持re（正则表达式）和n（普通字串）")
                     print("样例：\taddtr re 火.*?鲁.*? 火奴鲁鲁")
                     print("\taddtr n 撸撸 火奴鲁鲁")
@@ -436,77 +439,77 @@ class ngaC():
                 if cmdchr=="q":
                     continue
                 else:
-                    trfrom=[]
-                    trto=[]
-                    trrefrom=[]
-                    trreto=[]
+                    self.trfrom=[]
+                    self.trto=[]
+                    self.trrefrom=[]
+                    self.trreto=[]
 
-                    igfrom=[]
-                    igrefrom=[]
+                    self.igfrom=[]
+                    self.igrefrom=[]
                     
                     with open("ngaTranslate_dict.txt","r") as fa:
                         for i in fa:
                             cur_dict=json.loads(i)
                             if cur_dict["type"]=="re":
-                                trrefrom.append(cur_dict["from"])
-                                trreto.append(cur_dict["to"])
+                                self.trrefrom.append(cur_dict["from"])
+                                self.trreto.append(cur_dict["to"])
                             elif cur_dict["type"]=="n":
-                                trfrom.append(cur_dict["from"])
-                                trto.append(cur_dict["to"])
+                                self.trfrom.append(cur_dict["from"])
+                                self.trto.append(cur_dict["to"])
 
                     with open("ngaIgnore_dict.txt","r") as fa:
                         for i in fa:
                             cur_dict=json.loads(i)
                             if cur_dict["type"]=="re":
-                                igrefrom.append(cur_dict["from"])
+                                self.igrefrom.append(cur_dict["from"])
                             elif cur_dict["type"]=="n":
-                                igfrom.append(cur_dict["from"])
+                                self.igfrom.append(cur_dict["from"])
                     a1=0
                     a2=1
-                    while a1<len(igfrom)-1:#去重
+                    while a1<len(self.igfrom)-1:#去重
                         a2=a1+1
-                        while a2<len(igfrom):
-                            if igfrom[a1]==igfrom[a2]:
-                                igfrom.pop(a2)
+                        while a2<len(self.igfrom):
+                            if self.igfrom[a1]==self.igfrom[a2]:
+                                self.igfrom.pop(a2)
                             else:
                                 a2+=1
                         a1+=1
                     a1=0
                     a2=1
-                    while a1<len(trrefrom)-1:
+                    while a1<len(self.trrefrom)-1:
                         a2=a1+1
-                        while a2<len(trrefrom):
-                            if trrefrom[a1]==trrefrom[a2]:
-                                trrefrom.pop(a2)
-                                trreto.pop(a2)
+                        while a2<len(self.trrefrom):
+                            if self.trrefrom[a1]==self.trrefrom[a2]:
+                                self.trrefrom.pop(a2)
+                                self.trreto.pop(a2)
                             else:
                                 a2+=1
                         a1+=1
                     a1=0
                     a2=1
-                    while a1<len(trfrom)-1:
+                    while a1<len(self.trfrom)-1:
                         a2=a1+1
-                        while a2<len(trfrom):
-                            if trfrom[a1]==trfrom[a2]:
-                                trfrom.pop(a2)
-                                trto.pop(a2)
+                        while a2<len(self.trfrom):
+                            if self.trfrom[a1]==self.trfrom[a2]:
+                                self.trfrom.pop(a2)
+                                self.trto.pop(a2)
                             else:
                                 a2+=1
                         a1+=1
                     a1=0
                     a2=1
-                    while a1<len(igrefrom)-1:
+                    while a1<len(self.igrefrom)-1:
                         a2=a1+1
-                        while a2<len(igrefrom):
-                            if igrefrom[a1]==igrefrom[a2]:
-                                igrefrom.pop(a2)
+                        while a2<len(self.igrefrom):
+                            if self.igrefrom[a1]==self.igrefrom[a2]:
+                                self.igrefrom.pop(a2)
                             else:
                                 a2+=1
                         a1+=1
                         
-                    a1=len(igfrom)-1
+                    a1=len(self.igfrom)-1
                     a2=a1-1
-                    doneli=[False for i in igfrom]
+                    doneli=[False for i in self.igfrom]
                     #对列表进行子字符串处理，利用不知道什么排序
                     while a1>0:
                         a2=a1-1
@@ -514,8 +517,8 @@ class ngaC():
                                 a1-=1
                         while a2>0:
                             try:
-                                tmp=igfrom[a1].index(igfrom[a2])
-                                igfrom[a1],igfrom[a2]=swi(igfrom[a1],igfrom[a2])
+                                tmp=self.igfrom[a1].index(self.igfrom[a2])
+                                self.igfrom[a1],self.igfrom[a2]=swi(self.igfrom[a1],self.igfrom[a2])
                                 a1=a2
                             except ValueError:
                                 pass
@@ -523,18 +526,18 @@ class ngaC():
                         doneli[a1]=True
                         a1-=1
 
-                    a1=len(trfrom)-1
+                    a1=len(self.trfrom)-1
                     a2=a1-1
-                    doneli=[False for i in trfrom]
+                    doneli=[False for i in self.trfrom]
                     while a1>0:
                         a2=a1-1
                         while doneli[a1]:
                                 a1-=1
                         while a2>0:
                             try:
-                                tmp=trfrom[a1].index(trfrom[a2])
-                                trfrom[a1],trfrom[a2]=swi(trfrom[a1],trfrom[a2])
-                                trto[a1],trto[a2]=swi(trto[a1],trto[a2])
+                                tmp=self.trfrom[a1].index(self.trfrom[a2])
+                                self.trfrom[a1],self.trfrom[a2]=swi(self.trfrom[a1],self.trfrom[a2])
+                                self.trto[a1],self.trto[a2]=swi(self.trto[a1],self.trto[a2])
                                 a1=a2
                             except ValueError:
                                 pass
@@ -543,33 +546,33 @@ class ngaC():
                         a1-=1
 
                     with open("ngaIgnore_dict.txt","w") as fa:
-                        for i in igfrom:
+                        for i in self.igfrom:
                             fa.write(json.dumps({"type":"n","from":i})+"\n")
                     with open("ngaIgnore_dict.txt","a") as fa:      
-                        for i in igrefrom:
+                        for i in self.igrefrom:
                             fa.write(json.dumps({"type":"re","from":i})+"\n")
                     with open("ngaTranslate_dict.txt","w") as fa:
-                        for i in range(len(trfrom)):
-                            fa.write(json.dumps({"type":"n","from":trfrom[i],"to":trto[i]})+"\n")
+                        for i in range(len(self.trfrom)):
+                            fa.write(json.dumps({"type":"n","from":self.trfrom[i],"to":self.trto[i]})+"\n")
                     with open("ngaTranslate_dict.txt","a") as fa:      
-                        for i in range(len(trrefrom)):
-                            fa.write(json.dumps({"type":"re","from":trrefrom[i],"to":trreto[i]})+"\n")
+                        for i in range(len(self.trrefrom)):
+                            fa.write(json.dumps({"type":"re","from":self.trrefrom[i],"to":self.trreto[i]})+"\n")
                     print("\n转义字典正则部分：")
                     print("序号\t表达式\t转换内容")
-                    for i in range(len(trrefrom)):
-                        print(str(i)+"\t"+trrefrom[i]+"\t"+trreto[i])
+                    for i in range(len(self.trrefrom)):
+                        print(str(i)+"\t"+self.trrefrom[i]+"\t"+self.trreto[i])
                     print("\n转义字典通常部分：")
                     print("序号\t关键字\t替换内容")
-                    for i in range(len(trfrom)):
-                        print(str(i)+"\t"+trfrom[i]+"\t"+trto[i])
+                    for i in range(len(self.trfrom)):
+                        print(str(i)+"\t"+self.trfrom[i]+"\t"+self.trto[i])
                     print("\n忽略字典正则：")
                     print("序号\t表达式")
-                    for i in range(len(igrefrom)):
-                        print(str(i)+"\t"+igrefrom[i])
+                    for i in range(len(self.igrefrom)):
+                        print(str(i)+"\t"+self.igrefrom[i])
                     print("\n忽略字典通常：")
                     print("序号\t关键字")
-                    for i in range(len(igfrom)):
-                        print(str(i)+"\t"+igfrom[i])
+                    for i in range(len(self.igfrom)):
+                        print(str(i)+"\t"+self.igfrom[i])
                     # print(trrefrom)
                     # print(trreto)
                     # print(trfrom)

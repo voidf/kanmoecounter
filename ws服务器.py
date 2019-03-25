@@ -50,7 +50,7 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
             
             clients.pop(self.username)
             os.chdir(os.getcwd()+"/../")
-            shutil.rmtree("./%s"%targ
+            shutil.rmtree("./%s"%targ)
 
         except socket.timeout:
             print("连接超时，清除连接")

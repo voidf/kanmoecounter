@@ -62,7 +62,7 @@ class ngaC():
         for S in istr:
             self.send_data(S)
         dt=self.sok.recv(8192)
-        if dt==b'' or data[0]==136:
+        if dt==b'' or dt[0]==136:
             self.log.close()
             raise ImportError
         return self.pd(dt)

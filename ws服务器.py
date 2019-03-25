@@ -29,6 +29,23 @@ def send_data(clientSocket,m):
 def notify(target,message):
     send_data(clients[target],message)
 
+
+def recx(cn):
+    cn.recv(8192)
+    print("生肉data是",data)
+    if data==b'' or data[0]==136:
+        print("客户端退出")
+        clients.pop(self.username)
+        break
+    
+    data = self.pd(data)
+    
+    print("parsed data 是",data)
+
+    if len(data) == 0:
+        continue
+    message = self.username + ": " + data
+
 #客户端处理线程
 class websocket_thread(threading.Thread):
     def __init__(self, connection, username):

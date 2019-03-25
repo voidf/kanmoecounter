@@ -26,6 +26,7 @@ class ngaC():
         self.sok.send(data)
 
     def pd(self,info):
+        print(info)
         code_len = info[1] & 0x7f
         if code_len == 0x7e:
             extend_payload_len = info[2:4]
@@ -45,6 +46,7 @@ class ngaC():
             bytes_list.append(chunk)
         try:
             raw_str = str(bytes_list, encoding="utf-8")
+            print(raw_str)
         except UnicodeDecodeError:
             self.prinx("解码错误")
             return self.pd(info+self.sok.recv(8192))
@@ -62,7 +64,7 @@ class ngaC():
         for S in istr:
             self.send_data(S)
         dt=self.sok.recv(8192)
-        if dt==b'' or data[0]==136:
+        if dt==b'' or dt[0]==136:
             self.log.close()
             raise ImportError
         return self.pd(dt)

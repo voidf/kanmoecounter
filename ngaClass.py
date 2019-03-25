@@ -55,7 +55,6 @@ class ngaC():
         return raw_str
 
     def prinx(self,*pstr):
-        
         for S in pstr:
             print(S)
             self.send_data(S)
@@ -64,6 +63,7 @@ class ngaC():
             self.send_data(S)
         dt=self.sok.recv(8192)
         if dt==b'' or data[0]==136:
+            self.log.close()
             raise ImportError
         return self.pd(dt)
 

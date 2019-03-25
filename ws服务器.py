@@ -5,47 +5,13 @@ import hashlib
 import socket
 import base64
 import struct
-import os,traceback
+import os,traceback,shutil,random
 from ngaClass import ngaC
 global clients
 clients = {}
 
-#通知客户端
 #参考链接（服务器框架）：https://www.cnblogs.com/lichmama/p/3931212.html
 #参考链接（解决中文问题）：https://www.cnblogs.com/wangqj1996/p/9244601.html
-
-def send_data(clientSocket,m):
-    data = "换行测试\n制表测试\tWWW"
-    token = b'\x81'
-    length = len(data.encode())
-    if length<=125:
-        token += struct.pack('B', length)
-    elif length <= 0xFFFF:
-        token += struct.pack('!BH', 126, length)
-    else:
-        token += struct.pack('!BQ', 127, length)
-    data = token + data.encode()
-    clientSocket.send(data)
-
-def notify(target,message):
-    send_data(clients[target],message)
-
-
-# def recx(cn):
-#     cn.recv(8192)
-#     print("生肉data是",data)
-#     if data==b'' or data[0]==136:
-#         print("客户端退出")
-#         clients.pop(username)
-#         return
-    
-#     data = pd(data)
-    
-#     print("parsed data 是",data)
-
-#     if len(data) == 0:
-#         return
-#     message = username + ": " + data
 
 #客户端处理线程
 class websocket_thread(threading.Thread):
@@ -67,79 +33,39 @@ HTTP/1.1 101 WebSocket Protocol Hybi-10\r\n\
 Upgrade: WebSocket\r\n\
 Connection: Upgrade\r\n\
 Sec-WebSocket-Accept: %s\r\n\r\n' % token)
-            os.system("pause")
+
+            #os.system("pause")
+            targ="./"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
+            print(targ)
+            if os.path.exists("./%s"%targ):
+                shutil.rmtree("./%s"%targ)
+            os.makedirs(targ)
+            for rt,ds,fs in os.walk("./kanmoecounter"):
+                for f in fs:
+                    src=os.path.join(rt,f)
+                    shutil.copy(src,targ)
+            os.chdir(os.getcwd()+'/'+targ)
             a=ngaC(self.connection)
-            # while True:
-            #     data = self.connection.recv(8192)
 
-            #     print("生肉data是",data)
-            #     if data==b'' or data[0]==136:
-            #         print("客户端退出")
-            #         clients.pop(self.username)
-            #         break
-                
-            #     data = self.pd(data)
-                
-            #     print("parsed data 是",data)
-
-            #     if len(data) == 0:
-            #         continue
-            #     message = self.username + ": " + data
-            #     notify(self.username,message)
         except socket.timeout:
             print("连接超时，清除连接")
             clients.pop(self.username)
+            os.chdir(os.getcwd()+"/../")
+            shutil.rmtree("./%s"%targ)
         except ImportError:
             print("客户端已经离线")
             clients.pop(self.username)
+            os.chdir(os.getcwd()+"/../")
+            shutil.rmtree("./%s"%targ)
         except Exception as e:
             print("未知错误")
+            clients.pop(self.username)
             traceback.print_exc()
+            os.chdir(os.getcwd()+"/../")
+            shutil.rmtree("./%s"%targ)
 
     #payload=我his都护府我阿是U有覅U暗示法开始开后方可试试看觉得好看福建省的会客室可返回看还是得夸海口市哈克龙圣诞好疯狂安徽水利返回斯柯达后方可绝对是开始哈克龙合法看来是哈卡莱双刀很快就是东方红可视电话孤苦伶仃是好看的是腹黑刚看电视费好更快的发挥高科技的份上花开电风扇换个快递费上过课单方事故开电风扇和广阔的发舒肝颗粒的算法好更快等方式给对方看脚后跟的饭卡手机号广阔的副书记和广阔的福建省看的复合弓一有hi，工行卡的健身房个花开电风扇和广东省房和刚开始的华工科技的算法和高科技的份上和高科技的份上换个看见山顶好看3432534257324658429365973246578346592670971209347329879283598716 经核实高考结束的和客观地说黑客攻击东方红开关机第四课广泛的精华第三方开个会的首付款更好地富士康和关键靠方大化工扩容一问题一二五义务和V就肯定会V就可好看V后肯定会各科室V看就看V看见hi义务热月很快就啊哈卡洛斯后方可圣诞节阿里和喀什啥都看画风我我阿姨覅地理福尔IE攘夷U而爱UR额hi和认可看似简单快删掉还是搞活动粉丝个华东师范换个谁的看是发动机开发速度快速度快水电费水电费等我his都护府我阿是U有覅U暗示法开始开后方可试试看觉得好看福建省的会客室可返回看还是得夸海口市哈克龙圣诞好疯狂安徽水利返回斯柯达后方可绝对是开始哈克龙合法看来是哈卡莱双刀很快就是东方红可视电话孤苦伶仃是好看的是腹黑刚看电视费好更快的发挥高科技的份上花开电风扇换个快递费上过课单方事故开电风扇和广阔的发舒肝颗粒的算法好更快等方式给对方看脚后跟的饭卡手机号广阔的副书记和广阔的福建省看的复合弓一有hi，工行卡的健身房个花开电风扇和广东省房和刚开始的华工科技的算法和高科技的份上和高科技的份上换个看见山顶好看3432534257324658429365973246578346592670971209347329879283598716 经核实高考结束的和客观地说黑客攻击东方红开关机第四课广泛的精华第三方开个会的首付款更好地富士康和关键靠方大化工扩容一问题一二五义务和V就肯定会V就可好看V后肯定会各科室V看就看V看见hi义务热月很快就啊哈卡洛斯后方可圣诞节阿里和喀什啥都看画风我我阿姨覅地理福尔IE攘夷U而爱UR额hi和认可看似简单快删掉还是搞活动粉丝个华东师范换个谁的看是发动机开发速度快速度快水电费水电费等
-    def pd(self,info):
-        code_len = info[1] & 0x7f
-        if code_len == 0x7e:
-            extend_payload_len = info[2:4]
-            mask = info[4:8]
-            decoded = info[8:]
-        elif code_len == 0x7f:
-            extend_payload_len = info[2:10]
-            mask = info[10:14]
-            decoded = info[14:]
-        else:
-            extend_payload_len = None
-            mask = info[2:6]
-            decoded = info[6:]
-        bytes_list = bytearray()
-        for i in range(len(decoded)):
-            chunk = decoded[i] ^ mask[i % 4]
-            bytes_list.append(chunk)
-        try:
-            raw_str = str(bytes_list, encoding="utf-8")
-        except UnicodeDecodeError:
-            print("解码错误")
-            return self.pd(info+self.connection.recv(8192))
-        if ord(raw_str[-3])!=2 and ord(raw_str[-2])!=3 and ord(raw_str[-1])!=3:
-            print("未接收文件尾")
-            return self.pd(info+self.connection.recv(8192))
-        #print(raw_str)
-        return raw_str
 
-    def parse_data(self, msg):
-        v = msg[1] & 0x7f
-        if v == 0x7e:
-            p = 4
-        elif v == 0x7f:
-            p = 10
-        else:
-            p = 2
-        mask = msg[p:p+4]
-
-        data = msg[p+4:]
-
-        return ''.join([chr(v ^ mask[k%4]) for k, v in enumerate(data)])
-        
     def parse_headers(self, msg):
         headers = {}
 

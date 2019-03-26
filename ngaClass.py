@@ -53,8 +53,9 @@ class ngaC():
         if ord(raw_str[-3])!=2 and ord(raw_str[-2])!=3 and ord(raw_str[-1])!=3:
             self.prinx("未接收文件尾")
             return self.pd(info+self.sok.recv(8192))
+        else:
         #self.prinx(raw_str)
-        return raw_str
+            return raw_str[:-3]
 
     def prinx(self,*pstr):
         for S in pstr:

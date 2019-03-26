@@ -38,6 +38,7 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
             os.chdir(os.getcwd()+"/../")
             targ="./"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
             print(targ)
+            os.chdir(os.getcwd()+"/../")
             if os.path.exists("./%s"%targ):
                 shutil.rmtree("./%s"%targ)
             os.makedirs(targ)
@@ -47,6 +48,10 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
                     shutil.copy(src,targ)
             os.chdir(os.getcwd()+'/'+targ)
             a=ngaC(self.connection)
+            
+            clients.pop(self.username)
+            os.chdir(os.getcwd()+"/../")
+            shutil.rmtree("./%s"%targ)
 
         except socket.timeout:
             print("连接超时，清除连接")

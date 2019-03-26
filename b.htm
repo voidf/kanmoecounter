@@ -76,6 +76,7 @@
 
         function displayContent(msg) {
             $("txtContent").value += "\r\n" + msg;
+            $("txtContent").scrollTop=$("txtContent").scrollHeight;
         }
         function onkey(event) { if (event.keyCode == 13) { send(); } }
     </script>

@@ -66,7 +66,6 @@ class ngaC():
             self.send_data(S)
         dt=self.sok.recv(8192)
         if dt==b'' or dt[0]==136:
-            self.log.close()
             raise ImportError
         return self.pd(dt)
 
@@ -150,7 +149,6 @@ class ngaC():
 
     def __init__(self,sok):
         self.sok=sok
-        self.log=open("ngaVoteLog.txt","w")
 
         self.users_id=[]#投票用户id
         self.comment_raw=[]#楼层投票原生字符串
@@ -200,9 +198,45 @@ class ngaC():
                 self.reply_time_before=int(self.inpux(">>>"))#投票日期
             except:
                 self.reply_time_before=0
-            lnk=self.inpux("请输入投票页链接，留空则用默认调试页")
-            if lnk=='':
-                lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+            self.prinx("请输入投票页链接，留空则用默认调试页")
+            self.prinx("或采用输入整数序号形式导入要计票的链接：")
+            lnkna=["预选赛A",
+            "预选赛B",
+            "预选赛C",
+            "预选赛D",
+            "预选赛E",
+            "预选赛F",
+            "预选赛G",
+            "预选赛H",
+            "小组赛A",
+            "小组赛B",
+            "小组赛C",
+            "小组赛D",
+            "小组赛E",
+            "小组赛F",
+            "小组赛G",
+            "小组赛H"
+            ]
+            lnkli=["https://bbs.nga.cn/read.php?tid=16600198&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16600238&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16600272&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16600307&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16626917&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16626926&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16626933&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16626945&_fp=2",
+            "https://bbs.nga.cn/read.php?tid=16683315",
+            "https://bbs.nga.cn/read.php?tid=16683351",
+            "https://bbs.nga.cn/read.php?tid=16683389",
+            "https://bbs.nga.cn/read.php?tid=16683435",
+            "https://bbs.nga.cn/read.php?tid=16752309",
+            "https://bbs.nga.cn/read.php?tid=16752339",
+            "https://bbs.nga.cn/read.php?tid=16752371",
+            "https://bbs.nga.cn/read.php?tid=16752423"
+            ]
+            self.prinx("序号\t赛事名")
+            for cu in range(len(lnkli)):
+                self.prinx("%d\t%s"%(cu,lnkna[cu]))
             ses=requests.session()
             hds={
                 "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -215,6 +249,26 @@ class ngaC():
                 "Upgrade-Insecure-Requests":"1",
                 "User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
             }
+            while True:
+                lnk=self.inpux()
+                try:
+                    sel=int(lnk)
+                    if sel<len(lnkli) and sel>=0:
+                        lnk=lnkli[sel]
+                        break
+                except:
+                    try:
+                        if requests.get(lnk,headers=hds).status_code==403:
+                            break
+                        elif lnk=='':
+                            break
+                    except:
+                self.prinx("输入值错误")
+
+
+            if lnk=='':
+                lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+            
             hds["Cookie"]=self.inpux("(不懂就先敲回车)Cookie:")
             if hds["Cookie"]=='':
                 try:
@@ -282,8 +336,10 @@ class ngaC():
                         self.prinx(str(p/len(self.users_id)*100)+"%")
                     p+=1
                     if regdate>1551369600:
-                        self.prinx("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%i)
-                        self.log.write("发现用户%s注册时间晚于2019年3月1日零点，抹去该用户投票\n"%i)
+                        pos=self.users_id.index(i)
+                        self.prinx("发现%s层用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%(self.comment_ind[pos],i))
+                        with open("ngaVoteLog.txt","a") as self.log:
+                            self.log.write("发现%s层用户%s注册时间晚于2019年3月1日零点，抹去该用户投票\n"%(self.comment_ind[pos],i))
                         while i in self.users_id:
                             pos=self.users_id.index(i)
                             del self.users_id[pos]
@@ -293,8 +349,10 @@ class ngaC():
                     elif i not in voted_uid:
                         voted_uid.append(i)
                     else:
-                        self.prinx("发现用户%s发表了多个回复，只保留第一个"%i)
-                        self.log.write("发现用户%s发表了多个回复，只保留第一个\n"%i)
+                        pos=self.users_id.index(i,self.users_id.index(i)+1)
+                        self.prinx("发现%s层用户%s发表了多个回复，只保留第一个"%(self.comment_ind[pos],i))
+                        with open("ngaVoteLog.txt","a") as self.log:
+                            self.log.write("发现%s层用户%s发表了多个回复，只保留第一个\n"%(self.comment_ind[pos],i))
                         while self.users_id.count(i)>1:
                             pos=self.users_id.index(i,self.users_id.index(i)+1)
                             del self.users_id[pos]
@@ -323,7 +381,6 @@ class ngaC():
 
     #def counting():
         while True:
-            self.log.flush()
             cmd=self.inpux(">>>")
             if cmd=="h":
                 self.prinx("可用命令：addig addtr ld auto show ato score manu pass save brute dig dtr q")
@@ -673,9 +730,11 @@ class ngaC():
                         if self.cur_vote.count(1)>3:
                             self.prinx("警告：当前投票对象大于3个")
                         self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
-                        self.log.write("手动计票\t 楼层：%d\t字符：%s\n"%(self.comment_ind[0],self.comment_process[0]))
+                        with open("ngaVoteLog.txt","a") as self.log:
+                            self.log.write("手动计票\t 楼层：%d\t字符：%s\n"%(self.comment_ind[0],self.comment_process[0]))
                         for ii in range(len(self.cur_vote)):
-                            self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
+                            with open("ngaVoteLog.txt","a") as self.log:
+                                self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
                         self.comment_process.pop(0)
                         self.users_id.pop(0)
                         self.comment_ind.pop(0)
@@ -707,17 +766,20 @@ class ngaC():
                         tpi=self.comment_process[inte]
                         i=self.chkdic(self.comment_process[inte])
                         if self.cur_vote.count(1)>3:
-                            self.prinx("投票对象大于3个，%s作废"%tpi)
-                            self.log.write("投票对象大于3个，%s作废\n"%tpi)
+                            self.prinx("投票对象大于3个，%s层%s作废"%(self.comment_ind[inte],tpi))
+                            with open("ngaVoteLog.txt","a") as self.log:
+                                self.log.write("投票对象大于3个，%s层%s作废\n"%(self.comment_ind[inte],tpi))
                             self.comment_process.pop(inte)
                             self.comment_ind.pop(inte)
                             self.users_id.pop(inte)
                             continue
                         elif i=='':
-                            self.prinx("已处理\t%s"%tpi)
-                            self.log.write("已处理\t%s:\n"%tpi)
+                            self.prinx("已处理\t%s层%s"%(self.comment_ind[inte],tpi))
+                            with open("ngaVoteLog.txt","a") as self.log:
+                                self.log.write("已处理\t%s层%s:\n"%(self.comment_ind[inte],tpi))
                             for ii in range(len(self.cur_vote)):
-                                self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
+                                with open("ngaVoteLog.txt","a") as self.log:
+                                    self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"; ")
                             self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
                             self.comment_process.pop(inte)
                             self.comment_ind.pop(inte)
@@ -754,7 +816,6 @@ class ngaC():
                     self.prinx(self.kansens[i]+"\t"+" "+str(self.votes[i]))
             else:
                 self.prinx("无法理解的命令：%s"%cmd)
-        self.log.close()
 
 if __name__=="__main__":
     ngac=ngaC("sokt")

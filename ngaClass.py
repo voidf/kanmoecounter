@@ -26,7 +26,7 @@ class ngaC():
         self.sok.send(data)
 
     def pd(self,info):
-        print(info)
+        #print(info)
         code_len = info[1] & 0x7f
         if code_len == 0x7e:
             extend_payload_len = info[2:4]
@@ -55,14 +55,16 @@ class ngaC():
             return self.pd(info+self.sok.recv(8192))
         else:
         #self.prinx(raw_str)
+            print(raw_str[:-3])
             return raw_str[:-3]
 
     def prinx(self,*pstr):
         for S in pstr:
-            print(S)
+            #print(S)
             self.send_data(S)
     def inpux(self,*istr):
         for S in istr:
+            print(S)
             self.send_data(S)
         dt=self.sok.recv(8192)
         if dt==b'' or dt[0]==136:
@@ -147,7 +149,7 @@ class ngaC():
         self.prinx(str(len(self.users_id)))
         self.prinx(str(len(self.comment_raw)))
 
-    def __init__(self,sok):
+    def __init__(self,sok,workpath=''):
         self.sok=sok
 
         self.users_id=[]#投票用户id
@@ -263,7 +265,7 @@ class ngaC():
                         elif lnk=='':
                             break
                     except:
-                self.prinx("输入值错误")
+                        self.prinx("输入值错误")
 
 
             if lnk=='':

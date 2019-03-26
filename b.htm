@@ -57,8 +57,9 @@
         }
  
         function send() {
-            var msg = $("sendText").value
-            console.log(msg+String.fromCharCode(2,3,3))
+            var msg = $("sendText").value;
+            $("sendText").setAttribute("value","");
+            console.log(msg+String.fromCharCode(2,3,3));
             socket.send(msg+String.fromCharCode(2,3,3));
         }
  

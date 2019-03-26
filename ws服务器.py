@@ -24,6 +24,7 @@ class websocket_thread(threading.Thread):
         print(self)
         try:
             print( 'new websocket client joined!')
+            targ="./"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
             data = self.connection.recv(8192)
             headers = self.parse_headers(data)
             #print(headers)
@@ -36,9 +37,9 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
 
             #os.system("pause")
             os.chdir(os.getcwd()+"/../")
-            targ="./"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
-            print(targ)
-            os.chdir(os.getcwd()+"/../")
+            
+            print(os.getcwd())
+            
             if os.path.exists("./%s"%targ):
                 shutil.rmtree("./%s"%targ)
             os.makedirs(targ)
@@ -49,26 +50,20 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
             os.chdir(os.getcwd()+'/'+targ)
             a=ngaC(self.connection)
             
-            clients.pop(self.username)
-            os.chdir(os.getcwd()+"/../")
-            shutil.rmtree("./%s"%targ)
+            
 
         except socket.timeout:
             print("连接超时，清除连接")
-            clients.pop(self.username)
-            os.chdir(os.getcwd()+"/../")
-            shutil.rmtree("./%s"%targ)
         except ImportError:
             print("客户端已经离线")
-            clients.pop(self.username)
-            os.chdir(os.getcwd()+"/../")
-            shutil.rmtree("./%s"%targ)
         except Exception as e:
             print("未知错误")
-            clients.pop(self.username)
             traceback.print_exc()
-            os.chdir(os.getcwd()+"/../")
-            shutil.rmtree("./%s"%targ)
+        clients.pop(self.username)
+        os.chdir(os.getcwd()+"/../")
+        shutil.rmtree("./%s"%targ)
+        print("delete completed")
+
 
     def parse_headers(self, msg):
         headers = {}

@@ -24,7 +24,7 @@ class websocket_thread(threading.Thread):
         print(self)
         try:
             print( 'new websocket client joined!')
-            targ="./"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
+            targ="../"+''.join(random.sample("qwertyuiopasdfghjklzxcvbnm",10))
             data = self.connection.recv(8192)
             headers = self.parse_headers(data)
             #print(headers)
@@ -36,19 +36,19 @@ Connection: Upgrade\r\n\
 Sec-WebSocket-Accept: %s\r\n\r\n' % token)
 
             #os.system("pause")
-            os.chdir(os.getcwd()+"/../")
+            #os.chdir(os.getcwd()+"/../")
             
             print(os.getcwd())
             
-            if os.path.exists("./%s"%targ):
-                shutil.rmtree("./%s"%targ)
+            if os.path.exists(targ):
+                shutil.rmtree(targ)
             os.makedirs(targ)
-            for rt,ds,fs in os.walk("./kanmoecounter"):
+            for rt,ds,fs in os.walk("./"):
                 for f in fs:
                     src=os.path.join(rt,f)
                     shutil.copy(src,targ)
-            os.chdir(os.getcwd()+'/'+targ)
-            a=ngaC(self.connection)
+            #os.chdir(os.getcwd()+'/'+targ)
+            a=ngaC(self.connection,targ)
             
             
 
@@ -60,8 +60,8 @@ Sec-WebSocket-Accept: %s\r\n\r\n' % token)
             print("未知错误")
             traceback.print_exc()
         clients.pop(self.username)
-        os.chdir(os.getcwd()+"/../")
-        shutil.rmtree("./%s"%targ)
+        #os.chdir(os.getcwd()+"/../")
+        shutil.rmtree(targ)
         print("delete completed")
 
 

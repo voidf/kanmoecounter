@@ -5,9 +5,28 @@
 </html>
     <head>
         <meta charset="utf-8">
+        <style>
+            #txtContent{
+                width:90%;
+            }
+            #sendText{
+                width:90%;
+            }
+            body{
+                background-color:#303030;
+            }
+            input{
+                background-color: #303030;
+                color:rgb(0, 255, 0);
+            }
+            textarea{
+                background-color: #303030;
+                color: rgb(0, 255, 0);
+            }
+        </style>
     </head>
     <body>
-        <h3>KanMoeCounterDemo</h3>
+        <h3 style="text-align:center;font-size:xx-large;color: #ffffff">KanMoeCounterDemo</h3>
         <div id="login">
             <div>
                 <input id="serverIP" type="text" placeholder="服务器IP" value="tenpu.cf" autofocus="autofocus" />
@@ -19,11 +38,12 @@
                 <div>
                     命令执行情况
                 </div>
-                <textarea id="txtContent" cols="50" rows="10" readonly="readonly"></textarea>
+                <textarea id="txtContent" readonly="readonly"></textarea>
             </div>
             <div>
                 <input id="sendText" type="text" placeholder="发送文本" value="" />
                 <input id="btnSend" type="button" value="发送" onclick="send()" />
+                <p id="wd" style="color:rgb(0, 255, 0)">你的工作路径:</p><a id="wda" target="__blank">here</a>
             </div>
         </div>
     </body>
@@ -57,9 +77,13 @@
         }
  
         function send() {
-            var msg = $("sendText").value;
-            document.getElementById("sendText").value="";
-            console.log(msg+String.fromCharCode(2,3,3));
+            var st=document.getElementById("sendText")
+            var msg = st.value;
+            st.value="";
+
+            
+
+            //console.log(msg+String.fromCharCode(2,3,3));
             socket.send(msg+String.fromCharCode(2,3,3));
         }
  
@@ -78,6 +102,24 @@
         function displayContent(msg) {
             $("txtContent").value += "\r\n" + msg;
             $("txtContent").scrollTop=$("txtContent").scrollHeight;
+            console.log(msg);
+            var li=msg.split("=||..");
+            console.log(li)
+            if(li.length==2){
+                //console.log($("wd").innerHtml)
+                $("wda").href=$("serverIP").value+li[1];
+            }
+            // var scrollHeight = $("txtContent").scrollHeight;
+            // var height = $("txtContent").offsetHeight;
+            // console.log(height);
+            // console.log(scrollHeight)
+            // if(height < scrollHeight){
+            //     $("txtContent").style.height = $("txtContent").scrollHeight+'px';
+            // }
+        }
+        window.onload = function(){
+            $("txtContent").style.height = window.screen.height * 0.5 + 'px';
+            console.log(window.screen.height);
         }
         function onkey(event) { if (event.keyCode == 13) { send(); } }
     </script>

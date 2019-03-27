@@ -2,10 +2,7 @@
 import requests,re,os,sys,json,copy,time
 import struct,socket,hashlib,base64
 from bs4 import BeautifulSoup
-#https://bbs.nga.cn/read.php?tid=16683315&_ff=564 小组A
-#https://bbs.nga.cn/read.php?tid=16683351&_ff=564 小组B
-#https://bbs.nga.cn/read.php?tid=16683389&_ff=564 小组C
-#https://bbs.nga.cn/read.php?tid=16683435&_ff=564 小组D
+
 # class Disconnected(Exception):
 #     def __init__(self, p):
 #         err = '客户端已经退出'
@@ -151,11 +148,13 @@ class ngaC():
 
     def __init__(self,X=None,Y=''):
         self.sok=X
+        self.prinx("Kimino path=||"+Y)
         if Y=='':
             pass
         else:
             Y+='/'
         self.ppr=Y
+        
         self.users_id=[]#投票用户id
         self.comment_raw=[]#楼层投票原生字符串
         self.comment_ind=[]#楼层索引

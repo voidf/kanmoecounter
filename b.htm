@@ -10,7 +10,7 @@
                 width:90%;
             }
             #sendText{
-                width:90%;
+                width:20%;
             }
             body{
                 background-color:#303030;
@@ -35,7 +35,7 @@
             </div>
             
             <div>
-                <div>
+                <div style="color: #ffffff;">
                     命令执行情况
                 </div>
                 <textarea id="txtContent" readonly="readonly"></textarea>
@@ -107,7 +107,7 @@
             console.log(li)
             if(li.length==2){
                 //console.log($("wd").innerHtml)
-                $("wda").href=$("serverIP").value+li[1];
+                $("wda").href=li[1];
             }
             // var scrollHeight = $("txtContent").scrollHeight;
             // var height = $("txtContent").offsetHeight;

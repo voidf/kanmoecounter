@@ -53,9 +53,46 @@ except:
         reply_time_before=int(input(">>>"))#投票日期
     except:
         reply_time_before=0
-    lnk=input("请输入投票页链接，留空则用默认调试页")
-    if lnk=='':
-        lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+    
+    print("请输入投票页链接，留空则用默认调试页")
+    print("或采用输入整数序号形式导入要计票的链接：")
+    lnkna=["预选赛A",
+    "预选赛B",
+    "预选赛C",
+    "预选赛D",
+    "预选赛E",
+    "预选赛F",
+    "预选赛G",
+    "预选赛H",
+    "小组赛A",
+    "小组赛B",
+    "小组赛C",
+    "小组赛D",
+    "小组赛E",
+    "小组赛F",
+    "小组赛G",
+    "小组赛H"
+    ]
+    lnkli=["https://bbs.nga.cn/read.php?tid=16600198&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16600238&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16600272&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16600307&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16626917&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16626926&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16626933&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16626945&_fp=2",
+    "https://bbs.nga.cn/read.php?tid=16683315",
+    "https://bbs.nga.cn/read.php?tid=16683351",
+    "https://bbs.nga.cn/read.php?tid=16683389",
+    "https://bbs.nga.cn/read.php?tid=16683435",
+    "https://bbs.nga.cn/read.php?tid=16752309",
+    "https://bbs.nga.cn/read.php?tid=16752339",
+    "https://bbs.nga.cn/read.php?tid=16752371",
+    "https://bbs.nga.cn/read.php?tid=16752423"
+    ]
+    print("序号\t赛事名")
+    for cu in range(len(lnkli)):
+        print("%d\t%s"%(cu,lnkna[cu]))
     ses=requests.session()
     hds={
         "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -68,6 +105,26 @@ except:
         "Upgrade-Insecure-Requests":"1",
         "User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
     }
+    while True:
+        lnk=input()
+        try:
+            sel=int(lnk)
+            if sel<len(lnkli) and sel>=0:
+                lnk=lnkli[sel]
+                break
+        except:
+            try:
+                if requests.get(lnk,headers=hds).status_code==403:
+                    break
+                elif lnk=='':
+                    break
+            except:
+                print("输入值错误")
+    
+    
+    if lnk=='':
+        lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+        
     hds["Cookie"]=input("(不懂就先敲回车)Cookie:")
     if hds["Cookie"]=='':
         try:

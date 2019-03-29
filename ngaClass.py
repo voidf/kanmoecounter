@@ -155,7 +155,7 @@ class ngaC():
             Y+='/'
         self.ppr=Y
         with open(self.ppr+"ngaVoteLog.txt","w") as lll:
-            lll.write("<head><meta charset="utf-8"></head>\n")
+            lll.write('''<head><meta charset="utf-8"></head>\n''')
             lll.write("运行于 "+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"\n")
         self.users_id=[]#投票用户id
         self.comment_raw=[]#楼层投票原生字符串
@@ -498,7 +498,7 @@ class ngaC():
                     continue
                 else:
                     with open(self.ppr+"给人看的结果.txt","w") as fwh:
-                        fwh.write("<head><meta charset="utf-8"></head>\n")
+                        fwh.write('''<head><meta charset="utf-8"></head>\n''')
                         fwh.write("舰娘当前计分：\n")
                         for i in range(len(self.kansens)):
                             fwh.write(self.kansens[i]+":"+str(self.votes[i])+"\n")

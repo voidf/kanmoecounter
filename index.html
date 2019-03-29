@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<style>
+a
+{
+    color: navy;
+}
+html
+{
+    height:100%;
+}
+body
+{
+    height:100%;
+    margin:0px;
+    background-color:rgb(0, 0, 0);
+}
+div
+{
+    height:100%;
+    width:100%;
+    margin:0px;
+    background-color:rgba(255,250,250,0.0);
+    padding:0px;
+    margin-top:0px;
+    margin-left:0px;
+    margin-bottom:0px;
+    text-align: center;
+    font-size:100px;
+    line-height: 100%;
+    display: table;
+    vertical-align: middle;
+}
+
+</style>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+	var body = document.body;
+	var html = document.documentElement;
+	var itv,
+		height = document.body.offsetHeight;
+	var page = scrollTop() / height | 0;
+	addEventListener("resize", onresize, false);
+	onresize();
+
+	//鼠标滚轮事件
+	document.body.addEventListener("onwheel" in document ? "wheel" : "mousewheel", function (e) {
+		clearTimeout(itv);
+		itv = setTimeout(function () {
+			//判断滚轮滚的方向
+			var delta = e.wheelDelta / 120 || -e.deltaY / 3;
+			page -= delta;
+			var max = (document.body.scrollHeight / height | 0) - 1;
+			if (page < 0) {
+				return page = 0;
+			}
+			if (page > max) {
+				return page = max;
+			}
+			move();
+		}, 100);
+		e.preventDefault();
+	});
+	//当窗体发生变化时还是保证每次滚动滚一屏
+	function onresize() {
+		height = body.offsetHeight;
+		move();
+	};
+
+	function move() {
+		var value = height * page;
+		var diff = scrollTop() - value;
+		(function callee() {
+			diff = diff / 1.2 | 0;
+			scrollTop(value + diff);
+			if (diff) {
+				itv = setTimeout(callee, 16);
+			}
+		})();
+	};
+
+	function scrollTop(v) {
+		if (v == null) {
+			return Math.max(body.scrollTop, html.scrollTop);
+		} else {
+			body.scrollTop = html.scrollTop = v;
+		}
+	}
+});
+
+
+var i = 0;
+var l = 0;
+var nowPage = -1;
+var xd = [];
+var xdd = [];
+var yd = [];
+var ydd = [];
+var divList=[];
+window.onload = function () {
+	//console.log(document.querySelectorAll("div"));
+	//console.log(document.querySelectorAll("div").length);
+	l = document.querySelectorAll("div").length;
+	divList = document.querySelectorAll("div");
+
+	for (j = 0; j < l; j++) {
+		xd.push(divList[j].offsetLeft);
+		xdd.push(divList[j].offsetLeft + divList[j].offsetWidth);
+		yd.push(divList[j].offsetTop);
+		ydd.push(divList[j].offsetTop + divList[j].offsetHeight);
+	}
+}
+
+
+document.onclick = function (event) {
+	var x = event.clientX + Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+	var y = event.clientY + Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+	for (j = 0; j < l; j++) {
+		if (x >= xd[j] && x <= xdd[j] && y <= ydd[j] && y >= yd[j]) {
+
+			if (j == nowPage) {
+				i++;
+			}
+			else {
+				nowPage = j;
+				i = 1;
+			}
+		}
+	}
+
+	for (var lit of divList) {
+		if (lit.offsetTop == yd[nowPage]) {
+			var pageObj=lit;
+			console.log(nowPage);
+		}
+	}
+    switch_to_files(nowPage);
+};
+function switch_to_files(inte){
+    var linkobj=document.querySelectorAll("div")[inte];
+    console.log(linkobj.querySelector("a"));
+};
+</script>
+</head>
+
+<body>
+    <div style="background-color:#9999ff;">
+            <a style="display: table-cell; vertical-align: middle;" href="ngaVoteLog.txt">计票日志</a>
+    </div>
+    <div style="background-color:rgb(100, 149, 237);">
+        <a style="display: table-cell; vertical-align: middle;" href="给人看的结果.txt">计票报告</a>
+    </div>
+    <div style="background-color:rgb(202, 194, 74);">
+            <a style="display: table-cell; vertical-align: middle;" href="ngaResult.json">脚本用恢复进度文件</a>
+    </div>
+    <div style="background-color:rgb(74, 165, 74);">
+            <a style="display: table-cell; vertical-align: middle;" href="red.png"><del style="font-size: 40px;">说不想薅羊毛都是假的，扫到多少拿去花吧。谢谢<br /></del>赞助</a>
+    </div>
+</body>
+<!--
+取用自：https://blog.csdn.net/weixin_33725239/article/details/88151728 
+-->
+</html>

@@ -2,7 +2,7 @@
 import requests,re,os,sys,json,copy,time
 import struct,socket,hashlib,base64
 from bs4 import BeautifulSoup
-
+import time
 # class Disconnected(Exception):
 #     def __init__(self, p):
 #         err = '客户端已经退出'
@@ -147,8 +147,8 @@ class ngaC():
         self.prinx(str(len(self.comment_raw)))
 
     def __init__(self,X=None,Y=''):
-        with open("ngaVoteLog.txt","w") as lll:
-            pass
+        with open(self.ppr+"ngaVoteLog.txt","w") as lll:
+            lll.write("运行于 "+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"\n")
         self.sok=X
         self.prinx("Kimino path=||"+Y)
         if Y=='':

@@ -147,6 +147,8 @@ class ngaC():
         self.prinx(str(len(self.comment_raw)))
 
     def __init__(self,X=None,Y=''):
+        with open("ngaVoteLog.txt","w") as lll:
+            pass
         self.sok=X
         self.prinx("Kimino path=||"+Y)
         if Y=='':

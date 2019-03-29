@@ -147,8 +147,6 @@ class ngaC():
         self.prinx(str(len(self.comment_raw)))
 
     def __init__(self,X=None,Y=''):
-        with open(self.ppr+"ngaVoteLog.txt","w") as lll:
-            lll.write("运行于 "+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"\n")
         self.sok=X
         self.prinx("Kimino path=||"+Y)
         if Y=='':
@@ -156,7 +154,8 @@ class ngaC():
         else:
             Y+='/'
         self.ppr=Y
-        
+        with open(self.ppr+"ngaVoteLog.txt","w") as lll:
+            lll.write("运行于 "+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"\n")
         self.users_id=[]#投票用户id
         self.comment_raw=[]#楼层投票原生字符串
         self.comment_ind=[]#楼层索引

@@ -32,6 +32,9 @@
 {"type": "n", "from": "\u5e03\u7406", "to": "\u5e03\u91cc"}
 {"type": "n", "from": "\u4f0a\u5341\u4e5d", "to": "\u4f0a19"}
 {"type": "n", "from": "\u7d2b\u5e03\u91cc", "to": "\u5e03\u91cc"}
+{"type": "n", "from": "\u65b9\u821f", "to": "\u7687\u5bb6\u65b9\u821f"}
+{"type": "n", "from": "\u6ce2\u7279\u5f69", "to": "\u6ce2\u7279\u5170"}
+{"type": "n", "from": "\u91d1\u5777\u5783", "to": "\u5723\u5730\u4e9a\u54e5"}
 {"type": "re", "from": "[iI]58.*?", "to": "\u4f0a58"}
 {"type": "re", "from": "[rR][jJ]", "to": "\u9f99\u9aa7"}
 {"type": "re", "from": "[1iI]19", "to": "\u4f0a19"}

@@ -19,6 +19,7 @@
 {"type": "n", "from": "\u5355\u63a8"}
 {"type": "n", "from": "\u597d\u96be\u9009"}
 {"type": "n", "from": "\u3002"}
+{"type": "n", "from": "\u5355\u6295"}
 {"type": "re", "from": "[zZ][sS][bB][dD]"}
 {"type": "re", "from": "\\[b\\]Reply to \\[pid=.*?\\[/b\\].*?"}
 {"type": "re", "from": "\\[s:.*?\\].*?"}

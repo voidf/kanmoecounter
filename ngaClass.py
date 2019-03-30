@@ -154,8 +154,8 @@ class ngaC():
         else:
             Y+='/'
         self.ppr=Y
-        with open(self.ppr+"ngaVoteLog.txt","w") as lll:
-            lll.write('''<head><meta charset="utf-8"></head>\n''')
+        with open(self.ppr+"ngaVoteLog.txt","w","utf_8_sig") as lll:
+            #没有用lll.write('''<head><meta charset="utf-8"></head>\n''')
             lll.write("运行于 "+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"\n")
         self.users_id=[]#投票用户id
         self.comment_raw=[]#楼层投票原生字符串
@@ -295,7 +295,7 @@ class ngaC():
                     lnk+="&rand=233"
             else:
                 if ses.get(lnk,headers=hds).status_code==200:
-                    with open(self.ppr+"ngack.txt","w") as fw:
+                    with open(self.ppr+"ngack.txt","w","utf_8_sig") as fw:
                         fw.write(hds["Cookie"])
                 else:
                     raise NameError("无效的Cookie,请重新确认或者回到上页使用游客Cookie")
@@ -343,7 +343,7 @@ class ngaC():
                     if regdate>1551369600:
                         pos=self.users_id.index(i)
                         self.prinx("发现%s层用户%s注册时间晚于2019年3月1日零点，抹去该用户投票"%(self.comment_ind[pos],i))
-                        with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                        with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                             self.log.write("发现%s层用户%s注册时间晚于2019年3月1日零点，抹去该用户投票\n"%(self.comment_ind[pos],i))
                         while i in self.users_id:
                             pos=self.users_id.index(i)
@@ -356,7 +356,7 @@ class ngaC():
                     else:
                         pos=self.users_id.index(i,self.users_id.index(i)+1)
                         self.prinx("发现%s层用户%s发表了多个回复，只保留第一个"%(self.comment_ind[pos],i))
-                        with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                        with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                             self.log.write("发现%s层用户%s发表了多个回复，只保留第一个\n"%(self.comment_ind[pos],i))
                         while self.users_id.count(i)>1:
                             pos=self.users_id.index(i,self.users_id.index(i)+1)
@@ -365,7 +365,7 @@ class ngaC():
                             del self.comment_ind[pos]
 
     #try:
-            with open(self.ppr+"ngaResult.json","w") as fr:#保存用户投票记录到文件
+            with open(self.ppr+"ngaResult.json","w","utf_8_sig") as fr:#保存用户投票记录到文件
                 for j in range(len(self.users_id)):
                     fr.writelines(json.dumps({self.users_id[j]:self.comment_raw[j]})+"\n")
             self.prinx("投票页面信息获取已经完成，切换到本地数据操作模式，输入h可查看帮助")
@@ -433,10 +433,10 @@ class ngaC():
                             raise NameError("格式错误")
                     else:
                         raise NameError("参数不明")
-                    with open(self.ppr+"ngaIgnore_dict.txt","w") as fa:
+                    with open(self.ppr+"ngaIgnore_dict.txt","w","utf_8_sig") as fa:
                         for i in self.igfrom:
                             fa.write(json.dumps({"type":"n","from":i})+"\n")
-                    with open(self.ppr+"ngaIgnore_dict.txt","a") as fa:      
+                    with open(self.ppr+"ngaIgnore_dict.txt","a","utf_8_sig") as fa:      
                         for i in self.igrefrom:
                             fa.write(json.dumps({"type":"re","from":i})+"\n")
                 except:
@@ -473,10 +473,10 @@ class ngaC():
                             raise NameError("格式错误")
                     else:
                         raise NameError("参数不明")
-                    with open(self.ppr+"ngaTranslate_dict.txt","w") as fa:
+                    with open(self.ppr+"ngaTranslate_dict.txt","w","utf_8_sig") as fa:
                         for i in range(len(self.trfrom)):
                             fa.write(json.dumps({"type":"n","from":self.trfrom[i],"to":self.trto[i]})+"\n")
-                    with open(self.ppr+"ngaTranslate_dict.txt","a") as fa:      
+                    with open(self.ppr+"ngaTranslate_dict.txt","a","utf_8_sig") as fa:      
                         for i in range(len(self.trrefrom)):
                             fa.write(json.dumps({"type":"re","from":self.trrefrom[i],"to":self.trreto[i]})+"\n")
                 except:
@@ -497,14 +497,14 @@ class ngaC():
                 if askconf=="q":
                     continue
                 else:
-                    with open(self.ppr+"给人看的结果.txt","w") as fwh:
-                        fwh.write('''<head><meta charset="utf-8"></head>\n''')
+                    with open(self.ppr+"给人看的结果.txt","w","utf_8_sig") as fwh:
+                        #fwh.write('''<head><meta charset="utf-8"></head>\n''')
                         fwh.write("舰娘当前计分：\n")
                         for i in range(len(self.kansens)):
                             fwh.write(self.kansens[i]+":"+str(self.votes[i])+"\n")
                         fwh.write("============================================\n")
                         fwh.write("楼层\t用户id\t评论内容\n")
-                        with open(self.ppr+"Result.json","w") as fw:
+                        with open(self.ppr+"Result.json","w","utf_8_sig") as fw:
                             fw.write(json.dumps({"kansens":self.kansens,"votes":self.votes})+"\n")
                             for i in range(len(self.comment_process)):
                                 fw.write(json.dumps({"floor":self.comment_ind[i],"user":self.users_id[i],"comment":self.comment_process[i]})+"\n")
@@ -521,10 +521,10 @@ class ngaC():
                     #self.prinx(cmdli)
                     self.prinx("添加类型：%s；关键字：%s"%(cmdli[0],cmdli[1]))
                     if cmdli[0]=="re":
-                        with open(self.ppr+"ngaIgnore_dict.txt","a") as fa:
+                        with open(self.ppr+"ngaIgnore_dict.txt","a","utf_8_sig") as fa:
                             fa.write(json.dumps({"type":"re","from":cmdli[1]})+"\n")
                     elif cmdli[0]=="n":
-                        with open(self.ppr+"ngaIgnore_dict.txt","a") as fa:
+                        with open(self.ppr+"ngaIgnore_dict.txt","a","utf_8_sig") as fa:
                             fa.write(json.dumps({"type":"n","from":cmdli[1]})+"\n")
                     else:
                         raise NameError("参数错误")
@@ -544,10 +544,10 @@ class ngaC():
                     #self.prinx(cmdli)
                     self.prinx("添加类型：%s；查找关键字：%s；替换字符：%s"%(cmdli[0],''.join(cmdli[1:-1]),cmdli[-1]))
                     if cmdli[0]=="re":
-                        with open(self.ppr+"ngaTranslate_dict.txt","a") as fa:
+                        with open(self.ppr+"ngaTranslate_dict.txt","a","utf_8_sig") as fa:
                             fa.write(json.dumps({"type":"re","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
                     elif cmdli[0]=="n":
-                        with open(self.ppr+"ngaTranslate_dict.txt","a") as fa:
+                        with open(self.ppr+"ngaTranslate_dict.txt","a","utf_8_sig") as fa:
                             fa.write(json.dumps({"type":"n","from":''.join(cmdli[1:-1]),"to":cmdli[-1]})+"\n")
                     else:
                         raise NameError("参数错误")
@@ -673,16 +673,16 @@ class ngaC():
                         doneli[a1]=True
                         a1-=1
 
-                    with open(self.ppr+"ngaIgnore_dict.txt","w") as fa:
+                    with open(self.ppr+"ngaIgnore_dict.txt","w","utf_8_sig") as fa:
                         for i in self.igfrom:
                             fa.write(json.dumps({"type":"n","from":i})+"\n")
-                    with open(self.ppr+"ngaIgnore_dict.txt","a") as fa:      
+                    with open(self.ppr+"ngaIgnore_dict.txt","a","utf_8_sig") as fa:      
                         for i in self.igrefrom:
                             fa.write(json.dumps({"type":"re","from":i})+"\n")
-                    with open(self.ppr+"ngaTranslate_dict.txt","w") as fa:
+                    with open(self.ppr+"ngaTranslate_dict.txt","w","utf_8_sig") as fa:
                         for i in range(len(self.trfrom)):
                             fa.write(json.dumps({"type":"n","from":self.trfrom[i],"to":self.trto[i]})+"\n")
-                    with open(self.ppr+"ngaTranslate_dict.txt","a") as fa:      
+                    with open(self.ppr+"ngaTranslate_dict.txt","a","utf_8_sig") as fa:      
                         for i in range(len(self.trrefrom)):
                             fa.write(json.dumps({"type":"re","from":self.trrefrom[i],"to":self.trreto[i]})+"\n")
                     self.prinx("\n转义字典正则部分：")
@@ -736,10 +736,10 @@ class ngaC():
                         if self.cur_vote.count(1)>3:
                             self.prinx("警告：当前投票对象大于3个")
                         self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
-                        with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                        with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                             self.log.write("手动计票\t 楼层：%d\t字符：%s\n"%(self.comment_ind[0],self.comment_process[0]))
                         for ii in range(len(self.cur_vote)):
-                            with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                            with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                                 self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"\n")
                         self.comment_process.pop(0)
                         self.users_id.pop(0)
@@ -773,7 +773,7 @@ class ngaC():
                         i=self.chkdic(self.comment_process[inte])
                         if self.cur_vote.count(1)>3:
                             self.prinx("投票对象大于3个，%s层%s作废"%(self.comment_ind[inte],tpi))
-                            with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                            with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                                 self.log.write("投票对象大于3个，%s层%s作废\n"%(self.comment_ind[inte],tpi))
                             self.comment_process.pop(inte)
                             self.comment_ind.pop(inte)
@@ -781,10 +781,10 @@ class ngaC():
                             continue
                         elif i=='':
                             self.prinx("已处理\t%s层%s"%(self.comment_ind[inte],tpi))
-                            with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                            with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                                 self.log.write("已处理\t%s层%s:\n"%(self.comment_ind[inte],tpi))
                             for ii in range(len(self.cur_vote)):
-                                with open(self.ppr+"ngaVoteLog.txt","a") as self.log:
+                                with open(self.ppr+"ngaVoteLog.txt","a","utf_8_sig") as self.log:
                                     self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"; ")
                             self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
                             self.comment_process.pop(inte)

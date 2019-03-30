@@ -107,23 +107,22 @@ except:
     }
     while True:
         lnk=input()
+        if lnk=='':
+            lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+            break
         try:
             sel=int(lnk)
             if sel<len(lnkli) and sel>=0:
                 lnk=lnkli[sel]
                 break
+            elif lnk=='':
+                break
         except:
             try:
                 if requests.get(lnk,headers=hds).status_code==403:
                     break
-                elif lnk=='':
-                    break
             except:
                 print("输入值错误")
-    
-    
-    if lnk=='':
-        lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
         
     hds["Cookie"]=input("(不懂就先敲回车)Cookie:")
     if hds["Cookie"]=='':

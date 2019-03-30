@@ -258,6 +258,9 @@ class ngaC():
             }
             while True:
                 lnk=self.inpux()
+                if lnk=='':
+                    lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
+                    break
                 try:
                     sel=int(lnk)
                     if sel<len(lnkli) and sel>=0:
@@ -267,15 +270,9 @@ class ngaC():
                     try:
                         if requests.get(lnk,headers=hds).status_code==403:
                             break
-                        elif lnk=='':
-                            break
                     except:
                         self.prinx("输入值错误")
 
-
-            if lnk=='':
-                lnk="https://bbs.nga.cn/read.php?tid=16683389&_ff=564"
-            
             hds["Cookie"]=self.inpux("(不懂就先敲回车)Cookie:")
             if hds["Cookie"]=='':
                 try:
@@ -786,6 +783,8 @@ class ngaC():
                             for ii in range(len(self.cur_vote)):
                                 with open(self.ppr+"ngaVoteLog.txt","a",encoding="utf_8_sig") as self.log:
                                     self.log.write(str(self.kansens[ii])+":"+str(self.cur_vote[ii])+"; ")
+                            with open(self.ppr+"ngaVoteLog.txt","a",encoding="utf_8_sig") as self.log:
+                                self.log.write("\n")
                             self.votes=[self.votes[ii]+self.cur_vote[ii] for ii in range(len(self.votes))]
                             self.comment_process.pop(inte)
                             self.comment_ind.pop(inte)

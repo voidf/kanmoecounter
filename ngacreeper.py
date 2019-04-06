@@ -71,7 +71,11 @@ except:
     "小组赛E",
     "小组赛F",
     "小组赛G",
-    "小组赛H"
+    "小组赛H",
+    "小组赛I",
+    "小组赛J",
+    "小组赛K",
+    "小组赛L"
     ]
     lnkli=["https://bbs.nga.cn/read.php?tid=16600198&_fp=2",
     "https://bbs.nga.cn/read.php?tid=16600238&_fp=2",
@@ -88,7 +92,11 @@ except:
     "https://bbs.nga.cn/read.php?tid=16752309",
     "https://bbs.nga.cn/read.php?tid=16752339",
     "https://bbs.nga.cn/read.php?tid=16752371",
-    "https://bbs.nga.cn/read.php?tid=16752423"
+    "https://bbs.nga.cn/read.php?tid=16752423",
+    "https://bbs.nga.cn/read.php?tid=16818221&_ff=564",
+    "https://bbs.nga.cn/read.php?tid=16818246&_ff=564",
+    "https://bbs.nga.cn/read.php?tid=16818281&_ff=564",
+    "https://bbs.nga.cn/read.php?tid=16818320&_ff=564"
     ]
     print("序号\t赛事名")
     for cu in range(len(lnkli)):
@@ -721,7 +729,8 @@ while True:
                     print("已处理\t%s"%tpi)
                     log.write("已处理\t%s:\n"%tpi)
                     for ii in range(len(cur_vote)):
-                        log.write(str(kansens[ii])+":"+str(cur_vote[ii])+"\n")
+                        log.write(str(kansens[ii])+":"+str(cur_vote[ii])+";")
+                    log.write("\n")
                     votes=[votes[ii]+cur_vote[ii] for ii in range(len(votes))]
                     comment_process.pop(inte)
                     comment_ind.pop(inte)
